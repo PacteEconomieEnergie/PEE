@@ -18,8 +18,8 @@ const LiquidChart = () => {
         },
       },
     
-    percent: 0.2,
-    radius: 0.2,
+    percent: 0.6,
+    radius: 2,
     outline: {
         border: 4,
         distance: 8,

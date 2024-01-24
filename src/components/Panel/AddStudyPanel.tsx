@@ -58,7 +58,7 @@ import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
         closable={true}
         onClose={handleClose}
         open={isVisible}
-        width={350}
+        width={450}
       >
         <div style={{ padding: 24 }}>
           <ProForm onFinish={handleFormSubmit} >

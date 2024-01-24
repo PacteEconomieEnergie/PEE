@@ -20,7 +20,11 @@ module.exports = {
       extend: {
         colors:{
           teaGreen:"#c7efcf",
-          beige:"#eef5db"
+          beige:"#eef5db",
+          primare:"#3bc0c3",
+          secondaire:"#33b0e0",
+          tertiare:"#f24f7c",
+          quadiare:"#716cb0"
         }
       },
       

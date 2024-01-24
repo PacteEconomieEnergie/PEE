@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 export const SignIn:React.FC=()=>{
+  const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -36,8 +37,11 @@ export const SignIn:React.FC=()=>{
         // Check if there are no errors
         if (!Object.values(newErrors).some((error) => error !== "")) {
           // Navigate to another component or perform an action on successful validation
-          navigate("/home")
+          navigate("/admin/Dashboard")
         }
+      };
+      const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
       };
     return(
         
@@ -58,18 +62,26 @@ export const SignIn:React.FC=()=>{
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
           </div>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
               Password
             </label>
             <input
-              type="password"
+               type={showPassword ? "text" : "password"}
               id="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 pr-10"
               placeholder="Enter your password"
+              
             />
+            <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-1 right-0 pr-3 flex items-center text-sm leading-5"
+          >
+            {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+          </button>
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
           <button

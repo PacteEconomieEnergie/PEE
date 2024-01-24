@@ -1,10 +1,15 @@
 import React,{useState} from 'react';
 import { useLocation } from 'react-router-dom';
-import { DashboardOutlined, BookOutlined, SettingOutlined,LogoutOutlined, } from '@ant-design/icons';
+import {  DashboardOutlined,
+  BookOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+  BellOutlined,
+  MailOutlined, } from '@ant-design/icons';
 import { AiOutlineUser } from 'react-icons/ai';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Link } from 'react-router-dom';
-import {Dropdown} from 'antd'
+import {Dropdown, Menu, Space, Badge} from 'antd'
 interface AppLayoutProps{
     children?:React.ReactNode
 }
@@ -68,26 +73,37 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
           ],
         },
       ];
-      const menuData = transformItemsToMenuData(items);
+      
+      const userMenu = (
+        <Menu items={[
+          {
+            key: 'logout',
+            icon: <LogoutOutlined />,
+            label: 'Logout',
+          },
+        ]} />
+      );
+      const extraMenuItems = [
+        {
+          key: 'notifications',
+          icon: <Badge count={5}><BellOutlined /></Badge>,
+          label: 'Notifications',
+        },
+        {
+          key: 'messages',
+          icon: <Badge count={3}><MailOutlined /></Badge>,
+          label: 'Messages',
+        },
+        // Add user profile to menu
+        {
+          key: 'user',
+          icon: <AiOutlineUser />,
+          label: <Dropdown overlay={userMenu} trigger={['click']}><img src="https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg" alt="Avatar" style={{ width: '32px', height: '32px', borderRadius: '50%' }} /></Dropdown>,
+        },
+      ]
+      const menuData = [...transformItemsToMenuData(items), ...extraMenuItems]
     return (
-    //   <div className="flex min-h-screen">
-    //   {/* Sidebar */}
-    //   <div className="flex flex-none">
-    //     <Sidebar currentPath={currentPath} showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-    //   </div>
 
-    //   <div className="flex flex-col flex-1 min-w-0">
-    //     {/* Header */}
-    //     <Header onLogout={handleLogout} setShowSidebar={setShowSidebar} />
-
-    //     <div className="flex-1 flex flex-col overflow-hidden">
-    //       {/* Main Content */}
-    //       <main className="flex-1 px-4 sm:px-28 overflow-x-auto">
-    //         {children}
-    //       </main>
-    //     </div>
-    //   </div>
-    // </div>
     <ProLayout
     location={{ pathname: location.pathname }}
     menuDataRender={() => menuData}
@@ -97,12 +113,13 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
     collapsed={collapsed}
     onCollapse={setCollapsed}
     title="PEE"
-    fixedHeader={true}
+    
+    
     logo={<img src="/images/logoPee.png" alt="Company Logo" />}
     avatarProps={{
       src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
       size: 'small',
-      title: 'header',
+      // title: 'header',
       render: (props:any, dom:any) => {
         return (
           <Dropdown
@@ -113,14 +130,42 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
                   icon: <LogoutOutlined />,
                   label: 'logout',
                 },
+                
               ],
             }}
           >
             {dom}
           </Dropdown>
         );
-      },
+      },  
     }}
+    
+  breakpoint="md" // Customize the breakpoint if needed
+ // headerContentRender={() => (
+    //   <div className="flex justify-between items-center w-full px-4">
+    //     <div>
+    //       {/* Left side: Can be empty if you don't have anything to put here */}
+    //     </div>
+    //     <div className="flex items-center space-x-4">
+    //       {/* Right side: Notifications, Messages, and Profile */}
+    //       <Badge count={5}>
+    //         <BellOutlined className="text-lg" />
+    //       </Badge>
+    //       <Badge count={3}>
+    //         <MailOutlined className="text-lg" />
+    //       </Badge>
+    //       {/* Profile Dropdown */}
+    //       <Dropdown overlay={menu} trigger={['click']}>
+    //         <img
+    //           src="https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg"
+    //           alt="Avatar"
+    //           className="w-8 h-8 rounded-full cursor-pointer"
+    //         />
+    //       </Dropdown>
+    //     </div>
+    //   </div>
+    // )}
+   
     // You can customize the header here if needed
     // If you want to use a default header, you can remove this line
     // headerContentRender={() => (<Header onLogout={handleLogout} setShowSidebar={setCollapsed} />)}

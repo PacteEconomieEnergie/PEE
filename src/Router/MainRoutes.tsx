@@ -8,7 +8,10 @@ import Dashboard from "../pages/Dashboard";
 import { EngenieerPage } from "../pages/Engenieer/Engenieer.page";
 import UserList from "../pages/Settings/UserList.page";
 import { UserDetails } from "../pages/Settings/UserDetails.page";
-
+import TasksPage from "../pages/Tasks/Tasks.page";
+import { IngenieurLayout } from "../Layout/IngenieurLayout";
+import AuthLayout from "../Layout/AuthLayout";
+import AssistantLayout from "../Layout/AssitantLayout";
 
 interface Route{
     path:string;
@@ -32,6 +35,10 @@ interface MainLayout{
     children?:React.ReactNode
 }
 export const routes:RouteConfig[]=[
+  {
+    path:"/",
+    layout:AuthLayout
+  },
     {
         path: "/admin/*",
         layout: AppLayout,
@@ -52,6 +59,7 @@ export const routes:RouteConfig[]=[
             path: "/Engenieer",
             element: <EngenieerPage />
           },
+          
         {
             path: "/Settings/:userType/",
             element: <UserList />,
@@ -63,7 +71,29 @@ export const routes:RouteConfig[]=[
             // ]
           }
         ]
-      }
+      },
+      {path:"/ingenieur/*",
+    layout:IngenieurLayout,
+  children:[
+    {
+      path: "/Tasks",
+      element: <TasksPage />
+    },
+
+
+  ]},
+  {
+      path:"/assitant/*",
+      layout:AssistantLayout,
+      children:[
+        {
+          path:'/Projects',
+          
+        }
+      ]
+
+  }
+
     // {
     //     path:"/",
     //     element:<LandingPage/>
