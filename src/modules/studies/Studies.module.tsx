@@ -1,48 +1,44 @@
-import React,{useState} from "react";
-import { Table } from "../../components/Table/Table";
-import NewStudyModal from "../../components/modals/NewStudyModal";
-export const Studies:React.FC=()=>{
-    const [showModal, setShowModal] = useState(false);
-    const studies = [
-        { id: 1, "Date de Réception": Date(), "Date de Soumission": Date(),"Client":"client 1 ","Nom et prénom de bénificier":"test2","facturé":false,"Type d'étude":"Nouvelle etude","catégorie":"classique","Nature":"Normale","Ingénieur":"use0","files":["test22"] },
-        { id: 1, "Date de Réception": Date(), "Date de Soumission": Date(),"Client":"client 1 ","Nom et prénom de bénificier":"test2","facturé":false,"Type d'étude":"Nouvelle etude","catégorie":"classique","Nature":"Normale","Ingénieur":"use1" },
-        { id: 1, "Date de Réception": Date(), "Date de Soumission": Date(),"Client":"client 1 ","Nom et prénom de bénificier":"test2","facturé":false,"Type d'étude":"Nouvelle etude","catégorie":"classique","Nature":"Normale","Ingénieur":"use1" },
-        { id: 1, "Date de Réception": Date(), "Date de Soumission": Date(),"Client":"client 1 ","Nom et prénom de bénificier":"test2","facturé":false,"Type d'étude":"Retouche","Nombre de retouche":5,"catégorie":"classique","Nature":"Normale","Ingénieur":"use1","fileHistory":["one","two"],"files":"test22" },
-        { id: 1, "Date de Réception": Date(), "Date de Soumission": Date(),"Client":"client 1 ","Nom et prénom de bénificier":"test2","facturé":false,"Type d'étude":"Nouvelle etude","catégorie":"classique","Nature":"Normale","Ingénieur":"use1" ,"files":"test22","fileHistory":["one","two"]},
-        // More study objects...
-      ]
+import React,{useEffect} from 'react';
+import StudiesTable from '../../components/Table/Table';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllStudies } from '../../store/studies/studySlice';
+import { AppDispatch } from '../../store';
+import { Spin, Alert } from 'antd';
+const Studies: React.FC = () => {
 
-      const addStudy = (newStudyData: any) => {
-        // Logic to add a new study (console logging for demonstration)
-        console.log('New Study Data:', newStudyData);
-        setShowModal(false); // Close the modal after adding the study
-      };
-      
-return(
-    <div className="container mx-auto p-6 bg-gray-100 rounded-lg flex-1 overflow-y-auto">
-    <div className="flex justify-between items-center mb-6">
-      
-      <button
-        onClick={() => setShowModal(true)}
-        className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none"
-      >
-        Add Study
-      </button>
-    </div>
+  const dispatch = useDispatch<AppDispatch>();
+  const { studies, isLoading, error } = useSelector((state: any) => state.studies);
+  
 
-    <div className="flex justify-center">
-        <div className=" w-full">
-          <Table data={studies} />
-        </div>
-      </div>
+  useEffect(() => {
+    dispatch(fetchAllStudies()); // Dispatch action to fetch studies
+  }, [dispatch]);
+  const downloadFile = (file: string) => {
+    // Logic to download the selected file (replace with your actual download logic)
+    console.log('Downloading file:', file);
+  };
+  
+  const handleActionClick = (action: string, record: any) => {
+    console.log(`${action} action on record:`, record);
+    // Add logic for each action here
+  };
+  if (isLoading) {
+    return <Spin size="large" />;
+  }
 
-    {showModal && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-        <div className="bg-white shadow-2xl p-8 rounded-lg max-w-md">
-          <NewStudyModal onClose={() => setShowModal(false)} onSave={addStudy} />
-        </div>
-      </div>
-    )}
-  </div>
-)
-}
+  // Render error message
+  if (error) {
+    return <Alert message="Error loading studies" type="error" />;
+  }
+  return ( <div className=" overflow-y-auto">
+  <StudiesTable
+    studies={studies}
+    onActionClick={handleActionClick}
+    onFileDownload={downloadFile}
+  />
+</div>
+   
+  );
+};
+
+ export default Studies;

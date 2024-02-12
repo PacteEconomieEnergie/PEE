@@ -1,80 +1,64 @@
 import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
+import { Chart } from '@antv/g2';
 
 const MyChart: React.FC = () => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const data:any ={
-    labels: ['Finis', 'En cours', 'En attend'],
-  datasets: [
-    {
-      label: 'test',
-      data: [12, 19, 3, ],
-      backgroundColor: [
-        '#5be7a9',
-        '#fda403',
-        "#ff4b68",
-        
-      ],
-      borderColor: [
-        '#5be7a9',
-        '#fda403',
-        '#ff4b68',
-       
-      ],
-      borderWidth: 1,
-    },
-  ],
-  }
-  const totalStudies = data.datasets[0].data.reduce((acc:any, curr:any) => acc + curr, 0);
-
-// Calculate percentages and update data values
-data.datasets[0].data = data.datasets[0].data.map((value:any) => ((value / totalStudies) * 100).toFixed(2));
+  const chartContainerRef = useRef(null);
 
   useEffect(() => {
-    if (chartRef && chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
+    // Ensure the container ref is present
+    if (chartContainerRef.current) {
+      // Create a new Chart instance
+      const chart = new Chart({
+        container: chartContainerRef.current,
+        autoFit:true,
+        
+      });
 
-      if (ctx) {
-        const chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-            options: {
-              plugins: {
-                legend: {
-                  display: true,
-                  position: 'right',
-                },
-                title: {
-                  display: true,
-                  text: 'Total Studies',
-                  font: {
-                    size: 18,
-                  },
-                },
-                tooltip: {
-                  callbacks: {
-                    label: (context) => {
-                      const label = data.labels[context.dataIndex];
-                      const value = data.datasets[context.datasetIndex].data[context.dataIndex];
-                      return `${label}: ${value}%`;
-                    },
-                  },
-                },
-              },
-            },
-          });
-        return () => {
-            chart.destroy();
-          };;
-      }
+      // Configure the chart
+      chart.coordinate({ type: 'theta', innerRadius: 0.25, outerRadius: 0.8 });
+      chart
+        .interval()
+        .data([
+          { type: 'Finis', value: 12 },
+          { type: 'En cours', value: 19 },
+          { type: 'En attend', value: 3 },
+        ])
+        .transform({ type: 'stackY' })
+        .encode('y', 'value')
+        .encode('color', 'type')
+        .scale('color', {
+          range: ['#e8c1a0', '#f47560', '#f1e15b', '#e8a838', '#61cdbb'],
+        })
+        .label({
+          text: 'value',
+          fontWeight: 'bold',
+          offset: 14,
+        })
+        .label({
+          text: 'type',
+          position: 'spider',
+          connectorDistance: 0,
+          fontWeight: 'bold',
+          textBaseline: 'bottom',
+          textAlign: (d:any) => (['Finis', 'sass'].includes(d.id) ? 'end' : 'start'),
+          dy: -4,
+        })
+        .style('radius', 4)
+        .style('stroke', '#fff')
+        .style('lineWidth', 2)
+        .animate('enter', { type: 'waveIn' })
+        .legend('color', { position: 'bottom', layout: { justifyContent: 'center' },itemSpacing: 10
+       })
+
+      // Render the chart
+      chart.render();
+
+      // Cleanup function to destroy the chart when the component unmounts
+      return () => chart.destroy();
     }
   }, []);
 
-  return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
-      <canvas ref={chartRef} />
-    </div>
-  );
+  return <div ref={chartContainerRef} />;
 };
 
 export default MyChart;

@@ -1,69 +1,46 @@
 import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
+import { Chart } from '@antv/g2';
 
 const ClientStudyChart: React.FC = () => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-
+  const containerRef = useRef(null);
   // Example data: replace this with your actual data
-  const data = {
-    labels: ['Client A', 'Client B', 'Client C', 'Client D', 'Client E'],
-    datasets: [
-      {
-        label: "Numéro D'étude'",
-        data: [10, 15, 8, 20, 12], // Replace this with your study counts for each client
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.5,
-      },
-    ],
-  };
+  const newData = [
+    { id: 'Client A', done: 10, toDo: 5, inProgress: 15, modification: 2 },
+    { id: 'Client B', done: 20, toDo: 8, inProgress: 19, modification: 6 },
+    { id: 'Client C', done: 23, toDo: 8, inProgress: 11, modification: 4 },
+    { id: 'Client D', done: 16, toDo: 15, inProgress: 3, modification: 1 },
+    
+    // ... add other clients here
+  ];
+  const transformedData = newData.flatMap(client => [
+    { client: client.id, type: 'Done', value: client.done },
+    { client: client.id, type: 'To Do', value: client.toDo },
+    { client: client.id, type: 'In Progress', value: client.inProgress },
+    { client: client.id, type: 'Modification', value: client.modification },
+  ]);
+
+  
 
   useEffect(() => {
-    if (chartRef && chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
-      if (ctx) {
-        const chart = new Chart(ctx, {
-          type: 'line',
-          data: data,
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Number of Studies',
-                  color: 'black',
-                  font: {
-                    size: 14,
-                  },
-                },
-              },
-              x: {
-                title: {
-                  display: true,
-                  text: 'Clients',
-                  color: 'black',
-                  font: {
-                    size: 14,
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        return () => {
-          chart.destroy();
-        };
-      }
+    if (containerRef.current ) {
+        const chart = new Chart({ container: containerRef.current,autoFit:true })
+  
+        chart
+        .interval()
+        .data(transformedData)
+        .encode('x', 'client')
+        .encode('y', 'value')
+        .encode('color', 'type')
+        .transform({ type: 'dodgeX' })
+        .interaction('elementHighlight', { background: true });
+        chart.render();
+  
+        return () => chart.destroy();
+      
+     
     }
-  }, []);
+  }, [transformedData]);
 
-  return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
-      <canvas ref={chartRef} />
-    </div>
-  );
+  return <div ref={containerRef} />;
 };
-
 export default ClientStudyChart;

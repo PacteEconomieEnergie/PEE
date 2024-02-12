@@ -1,7 +1,7 @@
 import React,{useState} from "react";
-import {Table} from '../components/Table/Table'
+//import {Table} from '../components/Table/Table'
 import NewStudyModal from "../components/modals/NewStudyModal";
-import { Header } from "../modules/Header/Header.module";
+// import  Header  from "../modules/Header/Header.module";
 import { Sidebar } from "../modules/sideBar/SideBar.module";
 
 export const HomePage:React.FC=()=>{

@@ -1,82 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Descriptions, Button, Form, Input } from 'antd';
 
+// Assuming your data type could be more complex than just string or number
 interface SidePanelProps {
   visible: boolean;
-  user: any; // Replace 'any' with the actual type of your user data
-  onClose: () => void;
-  onSave: (editedUser: any) => void;
+  data: any; // Using any to accommodate complex nested structures
+  onClose?: () => void;
+  onSave?: (editedData: any) => void; // Accept any type for editedData
+  isEditing?: boolean;
 }
 
-const SidePanel: React.FC<SidePanelProps> = ({ visible, user, onClose, onSave }) => {
-  const [isEditing, setEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState(user);
+const SidePanel: React.FC<SidePanelProps> = ({
+  visible,
+  data,
+  onClose,
+  onSave,
+  isEditing,
+}) => {
+  const [editedData, setEditedData] = useState(data);
+console.log(data,'the sidepanel data');
 
   useEffect(() => {
-    setEditedUser(user);
-  }, [user]);
+    setEditedData(data);
+  }, [data]);
 
-  const handleEdit = () => {
-    setEditing(true);
+  const renderDescriptionItem = (key: string, value: any) => {
+    if (Array.isArray(value)) {
+      return value.map((item, index) => (
+        <Descriptions.Item label={`${key} ${index + 1}`} key={`${key}-${index}`}>
+          {typeof item === 'object' ? JSON.stringify(item, null, 2) : item.toString()}
+        </Descriptions.Item>
+      ));
+    } else if (typeof value === 'object') {
+      return <Descriptions.Item label={key}>{JSON.stringify(value, null, 2)}</Descriptions.Item>;
+    } else {
+      return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+    }
   };
 
   const handleSave = () => {
-    // Implement your update logic here
-    onSave(editedUser);
-    setEditing(false);
+    if (onSave) {
+      onSave(editedData);
+    }
   };
 
   return (
     <Drawer
       width={400}
-      title={`Details for ${user?.name}`}
+      title="Details"
       placement="right"
       closable={true}
       onClose={onClose}
-      visible={visible}
+      open={visible}
     >
       {isEditing ? (
-        <Form>
-          <Descriptions column={1}>
-            <Descriptions.Item label="Name">
+        // For simplicity, not handling editing of complex structures in this example
+        <Form layout="vertical">
+          {Object.entries(editedData).map(([key, value]) => (
+            <Form.Item label={key} key={key}>
               <Input
-                value={editedUser?.name}
-                onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                value={value as string}
+                onChange={(e) => setEditedData({ ...editedData, [key]: e.target.value })}
               />
-            </Descriptions.Item>
-            <Descriptions.Item label="email">
-              <Input
-                value={editedUser?.email}
-                onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
-              />
-            </Descriptions.Item>
-            <Descriptions.Item label="phone">
-              <Input
-                value={editedUser?.phone}
-                onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })}
-              />
-            </Descriptions.Item>
-          </Descriptions>
-          <Button type="primary" onClick={handleSave}>
+            </Form.Item>
+          ))}
+          <Button onClick={handleSave} type="primary">
             Save
           </Button>
         </Form>
       ) : (
         <Descriptions column={1}>
-          <Descriptions.Item label="Name">{user?.name}</Descriptions.Item>
-          <Descriptions.Item label="email">{user?.email}</Descriptions.Item>
-          <Descriptions.Item label="phone">{user?.phone}</Descriptions.Item>
+          {Object.entries(data).map(([key, value]) => renderDescriptionItem(key, value))}
         </Descriptions>
       )}
-
-      <Button
-        type="primary"
-        onClick={() => (isEditing ? handleSave() : handleEdit())}
-        style={{ marginTop: '10px' }}
-      >
-        {isEditing ? 'Save' : 'Edit'}
-      </Button>
-      <Button className='bg-gray-200' type="primary" onClick={onClose} style={{ marginLeft: '10px' }}>
+      <Button onClick={onClose} style={{ marginTop: 16 }}>
         Close
       </Button>
     </Drawer>

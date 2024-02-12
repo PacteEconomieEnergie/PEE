@@ -1,10 +1,14 @@
 import React from 'react';
-import { Table, Button, Dropdown,Menu } from 'antd';
+import { Table,  Dropdown,Menu } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { PageHeader } from '@ant-design/pro-layout';
 import { ColumnProps } from 'antd/es/table';
 import { ColumnType, ColumnGroupType } from 'antd/lib/table';
 import SidePanel from '../Panel/SidePanel';
+import { useDispatch, useSelector } from 'react-redux';
+import { showSidePanel,
+  closeSidePanel,
+  startEditing, } from '../../store/sidebar/sidePanelSlice';
 interface DataTableConfig {
     dataTableColumns: ColumnProps<any>[];
     DATATABLE_TITLE: string;
@@ -12,8 +16,10 @@ interface DataTableConfig {
   }
   export const DataTable: React.FC<{ config: DataTableConfig }> = ({ config }) => {
   const { dataTableColumns, DATATABLE_TITLE, userData } = config;
-  const [sidePanelVisible, setSidePanelVisible] = React.useState(false);
-  const [selectedUser, setSelectedUser] = React.useState<any | null>(null);
+  const sidePanelVisible = useSelector((state:any) => state.sidePanel.visible);
+  const selectedUser = useSelector((state:any) => state.sidePanel.data);
+  const isEditing = useSelector((state:any) => state.sidePanel.isEditing);
+  const dispatch = useDispatch();
   const items = [
     {
       label: 'Show',
@@ -38,25 +44,55 @@ interface DataTableConfig {
   const handleAction = (key: any, record: any) => {
     switch (key) {
       case 'read':
-        setSelectedUser(record);
-        setSidePanelVisible(true);
+        dispatch(closeSidePanel());
+        dispatch(startEditing(false));
+        dispatch(showSidePanel({ data: record, isEditing: false }));
         break;
-  
+
       case 'edit':
-        setSelectedUser(record);
-        setSidePanelVisible(true);
+        dispatch(closeSidePanel());
+        dispatch(startEditing(true));
+        dispatch(showSidePanel({ data: record, isEditing: true }));
         break;
-  
+
       default:
         break;
     }
   };
-  
-  const handleRead = (record: any) => {
-    setSelectedUser(record);
-    setSidePanelVisible(true);
-  };
 
+  // const handleRead = (record: any) => {
+  //   setSelectedUser(record);
+  //   setIsEditing(false); // Set to read mode
+  //   setSidePanelVisible(true);
+  // };
+
+  // const handleEdit = (record: any) => {
+  //   setSelectedUser(record);
+  //   setIsEditing(true); // Set to edit mode
+  //   setSidePanelVisible(true);
+  // };
+  
+  const renderSidePanel = () => {
+    if (sidePanelVisible) {
+      return (
+        <SidePanel
+          visible={sidePanelVisible}
+          data={selectedUser}
+          onClose={() => dispatch(closeSidePanel())}
+          onSave={(editedData) => {
+            // Implement your update logic here
+            console.log('Saving user:', editedData);
+            // Call any necessary function to update the user data in your state or backend
+
+            // Close the side panel after saving
+            dispatch(closeSidePanel());
+          }}
+          isEditing={isEditing}
+        />
+      );
+    }
+    return null;
+  };
   const dataTableColumnsWithAction: (ColumnType<any> | ColumnGroupType<any>)[] = [
     ...dataTableColumns,
     {
@@ -97,20 +133,11 @@ interface DataTableConfig {
         columns={dataTableColumnsWithAction}
         rowKey={(item) => item.id}
         dataSource={userData}
-        pagination={false}
+        
         // loading={/* Add loading state based on Redux store or other state management */}
         scroll={{ x: true }}
       />
-      <SidePanel
-        visible={sidePanelVisible}
-        user={selectedUser}
-        onClose={() => setSidePanelVisible(false)}
-        onSave={(editedUser) => {
-            // Implement your update logic here
-            console.log('Saving user:', editedUser);
-            // Call any necessary function to update the user data in your state or backend
-          }}
-      />
+      {renderSidePanel()}
     </>
   );
 };
