@@ -1,7 +1,7 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useParams } from 'react-router-dom';
 import {DataTable} from "../../components/Table/DataTable";  
-
+import AddUserModal from '../../components/modals/AddUserModal';
 function UserList() {
   const { userType } = useParams();
 
@@ -34,11 +34,29 @@ function UserList() {
     DATATABLE_TITLE: ` ${userType} Data Table`,
     userData: userData,
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const addUser = (newUser:any) => {
+    console.log("A new user is being added");
+    
+  };
   return (
     
     
-      <DataTable config={dataTableConfig} /> 
+    <div>
+    <button onClick={openModal}>Add User</button>
+    <DataTable config={dataTableConfig} />
+    {/* Use the AddUserModal component */}
+    <AddUserModal isOpen={isModalOpen} onClose={closeModal} onAddUser={addUser} />
+  </div> 
     
   );
 }

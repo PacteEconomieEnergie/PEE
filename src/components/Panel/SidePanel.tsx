@@ -1,95 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Descriptions, Button, Form, Input } from 'antd';
 
-interface SidePanelProps<T extends Record<string, string | number>> {
+// Assuming your data type could be more complex than just string or number
+interface SidePanelProps {
   visible: boolean;
-  data: T;
-  onClose: () => void;
-  onSave: (editedData: T) => void;
-  isEditing: boolean; // Add the isEditing prop
+  data: any; // Using any to accommodate complex nested structures
+  onClose?: () => void;
+  onSave?: (editedData: any) => void; // Accept any type for editedData
+  isEditing?: boolean;
 }
 
-const SidePanel = <T extends Record<string, string | number>>({
+const SidePanel: React.FC<SidePanelProps> = ({
   visible,
   data,
   onClose,
   onSave,
-  isEditing, // Receive isEditing as a prop
-}: SidePanelProps<T>) => {
-  const { id, ...dataWithoutId } = data;
-  const [editedData, setEditedData] = useState(dataWithoutId);
+  isEditing,
+}) => {
+  const [editedData, setEditedData] = useState(data);
+console.log(data,'the sidepanel data');
 
   useEffect(() => {
-    setEditedData(dataWithoutId);
-  }, []);
+    setEditedData(data);
+  }, [data]);
 
-  const handleEdit = () => {
-    setEditedData(dataWithoutId); // Reset editedData when switching to edit mode
+  const renderDescriptionItem = (key: string, value: any) => {
+    if (Array.isArray(value)) {
+      return value.map((item, index) => (
+        <Descriptions.Item label={`${key} ${index + 1}`} key={`${key}-${index}`}>
+          {typeof item === 'object' ? JSON.stringify(item, null, 2) : item.toString()}
+        </Descriptions.Item>
+      ));
+    } else if (typeof value === 'object') {
+      return <Descriptions.Item label={key}>{JSON.stringify(value, null, 2)}</Descriptions.Item>;
+    } else {
+      return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+    }
   };
 
   const handleSave = () => {
-    onSave(editedData as T);
+    if (onSave) {
+      onSave(editedData);
+    }
   };
 
   return (
     <Drawer
       width={400}
-      title={`Details`}
+      title="Details"
       placement="right"
       closable={true}
       onClose={onClose}
       open={visible}
     >
       {isEditing ? (
-        <Form>
-          <Descriptions column={1}>
-            {Object.keys(dataWithoutId)?.map((key) => (
-              <Descriptions.Item label={key} key={key}>
-                <Input
-                  value={editedData[key] as string}
-                  onChange={(e) => setEditedData({ ...editedData, [key]: e.target.value })}
-                />
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-          
+        // For simplicity, not handling editing of complex structures in this example
+        <Form layout="vertical">
+          {Object.entries(editedData).map(([key, value]) => (
+            <Form.Item label={key} key={key}>
+              <Input
+                value={value as string}
+                onChange={(e) => setEditedData({ ...editedData, [key]: e.target.value })}
+              />
+            </Form.Item>
+          ))}
+          <Button onClick={handleSave} type="primary">
+            Save
+          </Button>
         </Form>
       ) : (
         <Descriptions column={1}>
-          {Object.keys(dataWithoutId).map((key) => (
-            <Descriptions.Item label={key} key={key}>
-              {dataWithoutId[key]}
-            </Descriptions.Item>
-          ))}
+          {Object.entries(data).map(([key, value]) => renderDescriptionItem(key, value))}
         </Descriptions>
       )}
-
-{isEditing ? (
-        <>
-          <Button
-            className='bg-gray-200'
-            onClick={handleSave}
-            style={{ marginTop: '10px', display: 'block' }}
-          >
-            Save
-          </Button>
-          <Button
-            className='bg-gray-200'
-            onClick={onClose}
-            style={{ marginLeft: '10px', display: 'block' }}
-          >
-            Close
-          </Button>
-        </>
-      ) : (
-        <Button
-          className='bg-gray-200'
-          onClick={onClose}
-          style={{ marginTop: '10px', marginLeft: '10px', display: 'block' }}
-        >
-          Close
-        </Button>
-      )}
+      <Button onClick={onClose} style={{ marginTop: 16 }}>
+        Close
+      </Button>
     </Drawer>
   );
 };

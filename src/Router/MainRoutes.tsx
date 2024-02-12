@@ -8,11 +8,15 @@ import Dashboard from "../pages/Dashboard";
 import { EngenieerPage } from "../pages/Engenieer/Engenieer.page";
 import UserList from "../pages/Settings/UserList.page";
 import { UserDetails } from "../pages/Settings/UserDetails.page";
-import TasksPage from "../pages/Tasks/Tasks.page";
+import TasksPage from "../pages/Ingenieur/Tasks/Tasks.page";
 import { IngenieurLayout } from "../Layout/IngenieurLayout";
 import AuthLayout from "../Layout/AuthLayout";
 import AssistantLayout from "../Layout/AssitantLayout";
-
+import Settings from "../pages/Ingenieur/Settings/Settings.Page";
+import Overview from "../pages/Ingenieur/Overview/Overview.Page";
+import Project from "../pages/Ingenieur/Projects/Project.Page";
+import ClientPage from "../pages/Assistant/Clients/Client.Page";
+import OverviewAssistant from "../pages/Assistant/Overview/OverviexAssistant.Page";
 interface Route{
     path:string;
     element?:ReactNode;
@@ -30,6 +34,7 @@ interface RouteConfig{
     layout?:React.FC,
     element?:ReactNode,
     children?:NestedRoute[],
+    allowedRoles?: string[]
 } 
 interface MainLayout{
     children?:React.ReactNode
@@ -42,6 +47,7 @@ export const routes:RouteConfig[]=[
     {
         path: "/admin/*",
         layout: AppLayout,
+        allowedRoles: ['ADMIN'],
         children: [
           {
             path: "/home",
@@ -59,6 +65,10 @@ export const routes:RouteConfig[]=[
             path: "/Engenieer",
             element: <EngenieerPage />
           },
+          {
+            path: "/Settings",
+            element: <Settings />
+          },
           
         {
             path: "/Settings/:userType/",
@@ -74,22 +84,48 @@ export const routes:RouteConfig[]=[
       },
       {path:"/ingenieur/*",
     layout:IngenieurLayout,
+    allowedRoles: ['ENGINEER'],
   children:[
     {
       path: "/Tasks",
       element: <TasksPage />
     },
+    {
+      path: "/OverView",
+      element: <Overview />
+    },
+    {
+      path: "/Settings",
+      element: <Settings />
+    },
+    {
+      path: "/Projects",
+      element: <Project />
+    },
 
 
   ]},
   {
-      path:"/assitant/*",
+      path:"/assistant/*",
       layout:AssistantLayout,
+      allowedRoles: ['ASSISTANT'],
       children:[
         {
-          path:'/Projects',
-          
-        }
+          path: "/Studies",
+          element: <StudiesPage />
+        },
+        {
+          path: "/Settings",
+          element: <Settings />
+        },
+        {
+          path: "/OverViewAssistant",
+          element: <OverviewAssistant />
+        },
+        {
+          path: "/Clients",
+          element: <ClientPage />
+        },
       ]
 
   }

@@ -1,194 +1,18 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import StudiesTable from '../../components/Table/Table';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllStudies } from '../../store/studies/studySlice';
+import { AppDispatch } from '../../store';
+import { Spin, Alert } from 'antd';
 const Studies: React.FC = () => {
-  const studies = [
-    {
-      id: 1,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": "false",
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use0",
-      "files": ["test22"],
-      "fileHistory": ["file1.pdf", "file2.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": "false",
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": "false",
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": "false",
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test25"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": "false",
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": true,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    {
-      id: 2,
-      "Date de Réception": Date().substring(0,21),
-      "Date de Soumission": Date().substring(0,21),
-      "Client": "client 1 ",
-      "Nom et prénom de bénificier": "test2",
-      "facturé": false,
-      "Type d'étude": "Nouvelle etude",
-      "catégorie": "classique",
-      "Nature": "Normale",
-      "Ingénieur": "use1",
-      "files": ["test23"],
-      "fileHistory": ["file3.pdf", "file4.pdf"],
-    },
-    // ... add more studies
-  ];
 
+  const dispatch = useDispatch<AppDispatch>();
+  const { studies, isLoading, error } = useSelector((state: any) => state.studies);
   
+
+  useEffect(() => {
+    dispatch(fetchAllStudies()); // Dispatch action to fetch studies
+  }, [dispatch]);
   const downloadFile = (file: string) => {
     // Logic to download the selected file (replace with your actual download logic)
     console.log('Downloading file:', file);
@@ -198,6 +22,14 @@ const Studies: React.FC = () => {
     console.log(`${action} action on record:`, record);
     // Add logic for each action here
   };
+  if (isLoading) {
+    return <Spin size="large" />;
+  }
+
+  // Render error message
+  if (error) {
+    return <Alert message="Error loading studies" type="error" />;
+  }
   return ( <div className=" overflow-y-auto">
   <StudiesTable
     studies={studies}

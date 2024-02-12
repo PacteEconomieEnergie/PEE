@@ -1,48 +1,43 @@
-import React,{useState} from "react";
-import { IoIosNotificationsOutline } from "react-icons/io"
-import { DropdownMenu } from "../../components/forms/DropdownMenu";
+// src/components/HeaderContent/HeaderContent.tsx
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Badge, Dropdown } from 'antd';
+import { BellOutlined, MailOutlined } from '@ant-design/icons';
+import NotificationPanel from '../../components/Panel/NotificationPanel';
+import MessagePanel from '../../components/Panel/MessagePanel';
+import ProfileDropdown from '../../components/Dropdown/ProfileDropdown';
+import { logout } from '../../store/auth/authSlice'; // Update path as needed
 
-interface HeaderProps{
-    onLogout:()=>void;
-    setShowSidebar:React.Dispatch<React.SetStateAction<boolean>>;
+interface HeaderContentProps {
+  notifications: Array<{ id: string; message: string }>;
+  messages: Array<{ id: string; message: string }>;
+  userName: string;
+
 }
-export const Header:React.FC<HeaderProps>=({onLogout,setShowSidebar  })=>{
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-      };
-      const handleLogout = () => {
-        // Perform logout logic here
-        console.log("Logging out...");
-      };
-      const toggleDrawer = () => {
-        setShowSidebar((prevShowSidebar) => !prevShowSidebar); // Toggle the sidebar/drawer visibility
-      };
-    return( 
-        <header className="bg-gray-100 p-4 flex justify-between items-center">
-  <div className="flex items-center w-full justify-end">
-  <div className="p-2 sm:hidden" onClick={toggleDrawer}>
-            <img src="/assets/icons/hamburger.svg" alt="Toggle Drawer" />
-          </div>
-    {/* Notification Icon */}
-    <div className="p-2">
-      <div className="text-3xl">
-        <IoIosNotificationsOutline />
-      </div>
+
+export const HeaderContent: React.FC<HeaderContentProps> = ({ notifications, messages, userName }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userLogged=useSelector((state:any)=>state.auth)
+ 
+  
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/'); // Redirect to login or home page as needed
+  };
+
+  return (
+    <div className="flex justify-end items-center space-x-4">
+      
+      <Dropdown overlay={<NotificationPanel  />} trigger={['click']}>
+        <Badge count={notifications.length}>
+          <BellOutlined className="text-2xl cursor-pointer" />
+        </Badge>
+      </Dropdown>
+      
+      <ProfileDropdown userName={userName} userEmail={userLogged.Email} onLogout={handleLogout} />
     </div>
-    {/* <button onClick={() => console.log("tttt")
-    } className="sm:hidden">
-                <img src="/assets/hamburger.svg" alt="Navigation for mobile" />
-            </button> */}
-    {/* Avatar for Profile Editing */}
-    <div className="p-2 cursor-pointer relative" onClick={toggleDropdown}>
-      <span className="bg-orange-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold">
-        A
-      </span>
-      <DropdownMenu isOpen={isDropdownOpen} handleLogout={handleLogout} />
-    </div>
-  </div>
-</header>
-  )
-}
+  );
+};

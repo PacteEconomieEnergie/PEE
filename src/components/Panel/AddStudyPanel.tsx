@@ -13,30 +13,27 @@ import React,{useState,useEffect} from "react";
 import { Drawer,Switch } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
-
+import { fetchClients } from '../../store/Clients/clientSlice'; // Import fetchClients action
+import { fetchEngineers } from '../../store/Engineers/engineersSlice'; // Import fetchEngineers action
+import { ConfigProvider } from 'antd';
+import { AppDispatch } from "../../store";
+import studyService from "../../Services/Api/Studies/StudiesService";
+import fr_FR from 'antd/lib/locale/fr_FR';
 
   const AddStudyPanel:React.FC=()=>{
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const isVisible = useSelector((state:any) => state.sidePanel.isVisible);
-    const [clientOptions, setClientOptions] = useState({});
+    const clients = useSelector((state:any) => state.client.clients);
+    const engineers = useSelector((state:any) => state.engineer.engineers);
+    const createdById=useSelector((state:any)=>state.auth.id)
     const [factured,setFactured]=useState(false)
     const [typeEtude, setTypeEtude] = useState('');
-    const [nature,setNature]=useState('')
+    
+    
     useEffect(() => {
       // Predefined clients data
-      const clients = [
-        { "IdClient": 1, "ClientName": "Acme Corporation" },
-        { "IdClient": 2, "ClientName": "Globex Inc." },
-        { "IdClient": 3, "ClientName": "Soylent Corp" }
-      ];
-      
-      // Transforming the clients data into the format suitable for `valueEnum`
-      const options = clients.reduce((acc:any, client) => {
-        acc[client.IdClient] = client.ClientName;
-        return acc;
-      }, {});
-  
-      setClientOptions(options);
+      dispatch(fetchClients()); // Fetch clients on component mount
+    dispatch(fetchEngineers());
     }, []);
   
     const handleClose = () => {
@@ -44,15 +41,90 @@ import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
       };
 
 
-      const handleFormSubmit = async (values:any) => {
-        console.log('Form Submitted:', values); // values will be an object with keys like 'password'
-        // values.password will hold the data entered in the "Password" field
+      const handleFormSubmit = async (values: any) => {
+        console.log('Form Submitted:', values); // Debugging line to check form values
+      
+        const formData = new FormData(); // Prepare a FormData object to hold form data
+      
+        // Append all form values to formData, except the file
+        Object.keys(values).forEach(key => {
+          let value = values[key];
+          if (key === 'Factured') {
+            console.log("Before conversion:", key, value); // Debugging
+    
+            // Assuming value could be "true"/"false" string or ["true", "0"]/["false", "0"] array
+            if (typeof value === 'string') {
+                value = value === "true" ? 1 : 0;
+            } else if (Array.isArray(value)) {
+                // If the value is an array, determine the conversion based on the first element
+                value = value[0] === "true" || value[1] === "1" ? 1 : 0;
+            } else {
+                // Fallback for boolean handling, just in case
+                value = value ? 1 : 0;
+            }
+    
+            console.log("After conversion:", key, "the type",typeof(value)); // Debugging
+            formData.append('Factured', value);
+            return; // Skip further processing for this key
+        }
+          // Exclude clientId and engineerId from being appended to formData
+          if (key !== 'clientId' && key !== 'engineerId' && key !== 'drag-pic') {
+              if (key === 'DateDeReception' || key === 'DateDeSoumission') {
+                  // Ensure dates are in ISO-8601 format
+                  value = (value instanceof Date) ? value.toISOString() : new Date(value).toISOString();
+              }
+              
+              
+              if (Array.isArray(value)) {
+                  // For array fields, append each item individually
+                  value.forEach(item => formData.append(key, item));
+              } else {
+                  // Append other fields directly
+                  formData.append(key, value);
+              }
+          }
+      });
+      
+        // Handle the 'factured' boolean by converting to '1' or '0'
+        // formData.append('Factured', values.factured ? '1' : '0');
+      
+      
+        // Append the file to formData if present
+        if (values['drag-pic'] && values['drag-pic'].length) {
+          // Assuming the first object in the array holds the file information
+          const fileObject = values['drag-pic'][0]; // Accessing the first item directly
+          if (fileObject.originFileObj) {
+              formData.append('pdfFile', fileObject.originFileObj); // Append the actual file to formData
+          }
+      }
+      
+        // Retrieve clientId and userId from form values or state/context if not part of the form
+        const clientId = values.clientId;
+        const userId = values.engineerId; // Assuming you're using engineerId as userId
+      
+        try {
+          console.log(formData,'the data form ===<');
+          
+          // Call the studyService to submit the form data, including the file
+          const response = await studyService.addStudy(formData, clientId, userId,createdById);
+          console.log('Study added successfully:', response);
+      
+          // Handle success - e.g., showing a success message, closing the form
+          handleClose(); // Assuming handleClose() closes the form/modal
+        } catch (error) {
+          console.error('Error adding study:', error);
+          // Handle error - e.g., showing an error message
+        }
       };
 
 
-
-
-    return ( <Drawer
+      const clientOptions = clients?.map((client:any) => ({ label: client?.ClientName, value: client?.IdClient }));
+      const engineerOptions = engineers?.map((engineer:any) => ({ label: engineer.Email, value: engineer.UserID }));
+    
+     
+    return ( 
+      <ConfigProvider locale={fr_FR}>
+    <Drawer
         title="Form Title"
         placement="right"
         closable={true}
@@ -61,29 +133,42 @@ import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
         width={450}
       >
         <div style={{ padding: 24 }}>
-          <ProForm onFinish={handleFormSubmit} >
+          <ProForm onFinish={handleFormSubmit} submitter={{
+            // Customize submit button text here
+            searchConfig: {
+              submitText: 'Submit Label',
+              resetText: 'Reset Label',
+            },
+          }} >
             {/* Add your form fields here */}
             <ProFormGroup title="Form">
             <ProFormDatePicker
         width="md"
-        name="DateDeRéception"
-        label="Date De Réception"
+        name="DateDeReception"
+        label="DateDeReceptionn"
         placeholder={"Date De Réception"}
+        rules={[{ required: true, message: "Please select your Date!" }]}
       />
       <ProFormDatePicker
         width="md"
-        name="DateDeSubmission"
-        label="Date De Submission"
+        name="DateDeSoumission"
+        label="DateDeSoumission"
         placeholder={"Date De Submission"}
+        rules={[{ required: true, message: "Please select your Date!" }]}
       />
         </ProFormGroup>
         <ProFormGroup>
         <ProFormSelect
-          name="select"
-          label="Select"
-          valueEnum={clientOptions}
+          name="clientId" label="Client"
+          options={clientOptions}
           placeholder="Please select a client"
           rules={[{ required: true, message: "Please select your client!" }]}
+        />
+        <ProFormSelect
+          name="engineerId" label="Engineer"
+          options={engineerOptions}
+          placeholder="Please select an engenieer"
+          rules={[{ required: true, message: "Please select your engenieer!" }]}
         />
         <ProFormText
             width="md"
@@ -93,13 +178,23 @@ import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
             rules={[{ required: true, message: "Please entre your full name!" }]}
           />
         </ProFormGroup>
-        <Switch
-          
-          checked={factured}
-          checkedChildren="Oui "
-          unCheckedChildren="Non"
-          onChange={setFactured}
-        />
+        <ProForm.Item
+    name="Factured"
+    valuePropName="checked" // Use "checked" to control Switch component
+    initialValue={factured} // Set initial value
+  >
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+        <label>Facturé</label>
+            <Switch
+              checked={factured}
+              checkedChildren="Oui"
+              unCheckedChildren="Non"
+              onChange={(checked)=>setFactured(checked)}
+              style={{ marginRight: 8 }}
+            />
+            
+          </div>
+          </ProForm.Item>
          <ProFormRadio.Group
         name="TypeEtude"
         label="Type Etude"
@@ -159,10 +254,12 @@ import { toggleSidePanel } from "../../store/sidebar/sidePanelSlice";
             label="Nature"
             options={['Normale', 'Prioritere']}
           />
-          <ProFormUploadDragger name="drag-pic" label="drag-pic" placeholder={"Please Add Your PDF File Here... "} />
+          <ProFormUploadDragger name="drag-pic" label="drag-pic" title="Drag files here to upload"
+            description="or click to browse files" />
           </ProForm>
         </div>
-      </Drawer>)
+      </Drawer>
+      </ConfigProvider>)
   }
 
   export default AddStudyPanel 

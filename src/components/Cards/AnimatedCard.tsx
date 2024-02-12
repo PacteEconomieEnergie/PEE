@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProCard } from '@ant-design/pro-components';
 import { useSpring, animated,useTransition } from 'react-spring';
-export  const AnimatedCard = () => {
+export  const AnimatedCard = ({content}:any) => {
     const bounceAndColorAnimation = useSpring({
         loop: true,
         to: [
@@ -18,8 +18,8 @@ export  const AnimatedCard = () => {
     
     <ProCard direction="column" ghost style={{ overflow: 'hidden', padding: '10px' }}>
       <ProCard layout="center" bordered style={{ height: '100px' }}>
-      <animated.div style={{ ...bounceAndColorAnimation, fontSize: '20px' }}>
-            Congratulations!  🎉
+      <animated.div style={{ ...bounceAndColorAnimation, fontSize: '30px' }}>
+            {content ? content:"Congratulations!  🎉"}
             </animated.div>
       </ProCard>
     </ProCard>

@@ -1,0 +1,7 @@
+{
+
+    "login":"/users/login",
+    "add":"/users/add",
+    "email":"/email/",
+    "idUser":"/id/"
+}

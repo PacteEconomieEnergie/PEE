@@ -9,9 +9,9 @@ export const Engineer:React.FC = () => {
   // Sample data for demonstration (replace this with your actual data or fetch it)
   const [engineers, setEngineers] = useState([
     { id: 1, name: "Engineer A", studiesDone: 20, email: "a@example.com", photo: "/assets/icons/avatar1.svg" },
-    { id: 2, name: "Engineer B", studiesDone: 15, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
-    { id: 2, name: "Engineer B", studiesDone: 15, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
-    { id: 2, name: "Engineer B", studiesDone: 15, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
+    { id: 2, name: "Engineer B", studiesDone: 5, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
+    { id: 2, name: "Engineer C", studiesDone: 10, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
+    { id: 2, name: "Engineer D", studiesDone: 15, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
     // ... more engineers
   ]);
 
