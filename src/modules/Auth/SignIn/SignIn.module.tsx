@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import axios, { AxiosError } from 'axios';
+import { Input } from "antd";
 import { loginSuccess } from "../../../store/auth/authSlice";
 import ApiService from "../../../Services/Api/ApiService";
 export const SignIn:React.FC=()=>{
@@ -91,7 +91,7 @@ export const SignIn:React.FC=()=>{
               Password
               
             </label>
-            <input
+            <Input.Password
                type={showPassword ? "text" : "password"}
               id="password"
               value={formData.password}
@@ -100,13 +100,13 @@ export const SignIn:React.FC=()=>{
               placeholder="Enter your password"
               
             />
-            <button
+            {/* <button
             type="button"
             onClick={togglePasswordVisibility}
             className="absolute inset-y-1 right-0 pr-3 flex items-center text-sm leading-5"
           >
             {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-          </button>
+          </button> */}
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
           <button

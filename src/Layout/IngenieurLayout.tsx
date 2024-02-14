@@ -37,7 +37,7 @@ export const IngenieurLayout: React.FC<IngenieurLayoutProps> = ({ children }) =>
           { id: '2', message: 'Reminder for tomorrow\'s meeting' },
           // ... more messages
         ],      // Your messages data specific to Ingenieur layout
-        userName: "Ingenieur Name",
+        userName: "",
         
       };
 
