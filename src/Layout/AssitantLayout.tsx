@@ -41,7 +41,7 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
         { id: '2', message: 'Reminder for tomorrow\'s meeting' },
         // ... more messages
       ],      // Your messages data specific to Ingenieur layout
-      userName: "Ingenieur Name",
+      userName: "",
       userEmail: "ingenieur@email.com",
     };
     

@@ -22,8 +22,13 @@ RUN npm run build-css && npm run build
 # serve is installed globally to make it available to run your built app
 RUN npm install -g serve
 
+# Copy the entrypoint script into the container and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Step 8: The port your app will run on
 EXPOSE 3000
 
 # Step 9: Run serve when the container launches
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["serve", "-s", "build", "-l", "3000"]

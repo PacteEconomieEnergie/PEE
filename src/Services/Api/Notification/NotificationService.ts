@@ -1,6 +1,5 @@
-import axios from 'axios';
 import ApiServiceInterceptor from '../Interceptors/ApiServiceInterceptor';
-const API_BASE_URL = 'http://localhost:3000'; // Update with your actual backend URL
+
 const axiosInstance=ApiServiceInterceptor.getInstance()
 export const ApiService = {
   fetchUserNotifications: async (userId:any) => {
