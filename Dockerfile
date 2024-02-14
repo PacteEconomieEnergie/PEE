@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 
 # Step 4: Install any needed packages
 # Using --production flag to skip installing devDependencies
-RUN npm ci --production
+RUN npm ci 
 
 # Step 5: Bundle app source
 COPY . .
@@ -17,6 +17,9 @@ COPY . .
 # Step 6: Build your app
 # Note: Including TailwindCSS build step based on your package.json scripts.
 RUN npm run build-css && npm run build
+
+# After building, remove devDependencies to keep the image size smaller
+RUN npm prune --production
 
 # Step 7: Install a simple HTTP server to serve your app
 # serve is installed globally to make it available to run your built app
