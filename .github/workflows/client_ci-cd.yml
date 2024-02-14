@@ -42,10 +42,10 @@ jobs:
           send "cd pee/\r"
           expect "#"
           send "echo 'Executing docker-compose pull client...'\r"
-          send "docker-compose pull client\r"
+          send "docker compose pull client\r"
           expect "#"
           send "echo 'Executing docker-compose up -d client...'\r"
-          send "docker-compose up -d client\r"
+          send "docker compose up -d \r"
           expect "#"
           echo "SSH script execution completed."
           
