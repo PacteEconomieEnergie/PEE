@@ -33,5 +33,6 @@ jobs:
           echo "Starting SSH script execution..."
           cd pee/
           echo 'Executing docker-compose pull client...'
-          docker-compose pull client
-          docker-compose up -d
+          docker compose pull client
+          docker compose up -d
+          echo "test runner successfully "
