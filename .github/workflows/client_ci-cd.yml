@@ -14,57 +14,57 @@ jobs:
       with:
         host: 163.172.194.175 
         username: root
-        key: -----BEGIN RSA PRIVATE KEY-----
-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
------END RSA PRIVATE KEY-----
+        key:               -----BEGIN RSA PRIVATE KEY-----
+            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
+                            -----END RSA PRIVATE KEY-----
 
         script: |
           echo "Successfully logged into the server."
