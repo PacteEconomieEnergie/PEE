@@ -29,18 +29,15 @@ jobs:
       with:
         host: ${{ secrets.HOSTED_SERVER_IP }}
         username: ${{ secrets.HOST_SERVER_USER }}
-        password: ${{secrets.HOSTED_SERVER_PASSWORD}}
+        key: ${{ secrets.HOSTED_SERVER_SSH_PRIVATE_KEY }}
         timeout: 5m
         
         script: |
           echo "Starting SSH script execution..."
-          send "cd pee/\r"
-          expect "#"
-          send "echo 'Executing docker-compose pull client...'\r"
-          send "docker-compose pull client\r"
-          expect "#"
-          send "docker-compose up -d \r"
-          expect "#" 
+          cd pee/
+          echo 'Executing docker-compose pull client...'
+          docker-compose pull client
+          docker-compose up -d
           
           
           
