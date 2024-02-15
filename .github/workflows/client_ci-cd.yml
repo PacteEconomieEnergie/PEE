@@ -27,21 +27,20 @@ jobs:
     - name: Notify Server to Update Client
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        password: ${{secrets.SERVER_PASSWORD}}
+        host: ${{ secrets.HOSTED_SERVER_IP }}
+        username: ${{ secrets.HOST_SERVER_USER }}
+        password: ${{secrets.HOSTED_SERVER_PASSWORD}}
         timeout: 5m
         
         script: |
           echo "Starting SSH script execution..."
-          spawn sudo -i
-          send "echo 'Entreing the PEE directory...'\r"
-          expect "password for your_username:"
-          send "${{ secrets.SERVER_PASSWORD }}\r"
-          expect "#"
           send "cd pee/\r"
           expect "#"
           send "echo 'Executing docker-compose pull client...'\r"
+          send "docker-compose pull client\r"
+          expect "#"
+          send "docker-compose up -d \r"
+          expect "#" 
           
           
           
