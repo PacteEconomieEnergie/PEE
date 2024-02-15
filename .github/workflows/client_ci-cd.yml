@@ -14,7 +14,8 @@ jobs:
       with:
         host: 163.172.194.175 
         username: root
-        key:               -----BEGIN RSA PRIVATE KEY-----
+        key:              
+                         -----BEGIN RSA PRIVATE KEY-----
             MIIJKwIBAAKCAgEA4nI6xI0pjKy9sY3stEkWDLEd/gMnfrkKYXRq8abTjzp8movo
             rPuj4IdGvhDqfsya6/+o7BmYgbK0ECTCj9Vke7k8rwiTpf/3j7wL4wVafAleDIX7
             PLYXbKxhsbP4tRbM2YIJu89Dt6euTdp1C6DJdj9Zwq0NK3HC9RsidEo58qKo4Gro
