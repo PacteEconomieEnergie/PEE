@@ -23,25 +23,16 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_CLIENT }}:frontApp
-
-    - name: Notify Server to Update Client
+    - name: Test SSH Connection
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        password: ${{secrets.SERVER_PASSWORD}}
-        timeout: 5m
-        
+        host: 163.172.194.175 
+        username: root
+        key: ${{secrets.NEW_SERVER_SSH_KEY}}
         script: |
           echo "Starting SSH script execution..."
-          spawn sudo -i
-          send "echo 'Entreing the PEE directory...'\r"
-          expect "password for your_username:"
-          send "${{ secrets.SERVER_PASSWORD }}\r"
-          expect "#"
-          send "cd pee/\r"
-          expect "#"
-          send "echo 'Executing docker-compose pull client...'\r"
-          
-          
-          
+          cd pee/
+          echo 'Executing docker-compose pull client...'
+          docker compose pull client
+          docker compose up -d
+          echo "test runner successfully "
