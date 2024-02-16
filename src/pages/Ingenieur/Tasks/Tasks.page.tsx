@@ -2,23 +2,14 @@
 import React,{useEffect, useMemo} from 'react';
 import TasksBoard from '../../../modules/Tasks/TasksBoard.module';
 import { ColumnsState } from '../../../modules/Tasks/TaskTypes';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStudiesByUserId } from '../../../store/studies/studySlice';
-import { getAuthInfo } from '../../../utils/storage/tokenUtils';
-import { AppDispatch } from '../../../store';
+import { useSelector } from 'react-redux';
+
 const TasksPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const userId = getAuthInfo()?.id; // Assuming getAuthInfo() returns the logged-in user's info or undefined
+ 
   const { userStudies, loading, error } = useSelector((state: any) => state.studies);
-  console.log("===>1",userStudies);
+ 
   
-  useEffect(() => {
-    const numericUserId = Number(userId);
-    if (!isNaN(numericUserId) && numericUserId > 0) { // Check if userId is a valid number and greater than 0
-      dispatch(fetchStudiesByUserId(numericUserId));
-    }else {console.log("something is happening here ");
-    }
-  }, [dispatch, userId]);
+ 
 
   const initialColumnsState: ColumnsState = useMemo(() => {
     // Assuming these statuses match the enum values in your schema
@@ -40,7 +31,7 @@ const TasksPage: React.FC = () => {
 
     return columns;
   }, [userStudies]);
-  console.log(initialColumnsState,'from the first one');
+  
   
   return (
     <div className='flex grid-column-3'>

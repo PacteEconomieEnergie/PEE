@@ -24,7 +24,7 @@ interface TasksBoardProps {
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
 const [selectedStudyId, setSelectedStudyId] = useState<number | null>(null);
 
-console.log("===> 2",initialColumnState);
+
 
   const handleDragAndDrop = async (result:any) => {
     const { source, destination, draggableId } = result;

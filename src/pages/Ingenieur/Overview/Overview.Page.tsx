@@ -4,59 +4,20 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
 import RcResizeObserver from 'rc-resize-observer';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../../store';
+
 import RingProgress from '../../../components/Charts/RingProgress';
 import { Progress, Space } from "antd";
 export default function Overview() {
   const conicColors = { "0%": "#87d068", "50%": "#ffe58f", "100%": "#ffccc7" };
-  const { userStudies, loading, error } = useSelector((state: any) => state.studies);
-  const dispatch = useDispatch<AppDispatch>();
+  const { userStudies, loading, error,studyStats } = useSelector((state: any) => state.studies);
+
   const [responsive, setResponsive] = useState(false);
 
-  const [studyStats, setStudyStats] = useState({
-    total: 0,
-    Done: 0,
-    inProgress: 0,
-    toDo: 0,
-    modifications: {
-      total: 0,
-      Done: 0,
-      inProgress: 0,
-      toDo: 0,
-    },
-   
-  });
-  console.log(userStudies,'from the overView');
-  
-  useEffect(() => {
-    const stats = userStudies.reduce((acc:any, study:any) => {
-      console.log(study)
-      
-      acc.total += 1; // Increment total for every study
-      if (study.studies.Status === 'Done') acc.Done += 1;
-      if (study.studies.Status === 'inProgress') acc.inProgress += 1;
-      if (study.studies.Status === 'toDo') acc.toDo += 1;
-       if (study.studies.TypeEtude === 'retouche') {
-      acc.modifications.total += 1;
-      if (study.studies.Status === 'Done') acc.modifications.Done += 1;
-      if (study.studies.Status === 'inProgress') acc.modifications.inProgress += 1;
-      if (study.studies.Status === 'toDo') acc.modifications.toDo += 1;
-    }
-      return acc;
-    }, { total: 0, Done: 0, inProgress: 0, toDo: 0,modifications: {
-      total: 0,
-      Done: 0,
-      inProgress: 0,
-      toDo: 0,
-    } });
-  
-    setStudyStats(stats);
-  }, [userStudies]);
 
-  const donePercentage = studyStats.total > 0 ? (studyStats.Done / studyStats.total) * 100 : 0;
-  const inProgressPercentage = studyStats.total > 0 ? (studyStats.inProgress / studyStats.total) * 100 : 0;
-  const toDoPercentage = studyStats.total > 0 ? (studyStats.toDo / studyStats.total) * 100 : 0;
-  console.log(studyStats);
+  const donePercentage = studyStats.total > 0 ? (studyStats.status.Done / studyStats.total) * 100 : 0;
+  const inProgressPercentage = studyStats.total > 0 ? (studyStats.status.inProgress / studyStats.total) * 100 : 0;
+  const toDoPercentage = studyStats.total > 0 ? (studyStats.status.toDo / studyStats.total) * 100 : 0;
+
   
   return (
     <RcResizeObserver
@@ -74,7 +35,7 @@ export default function Overview() {
       bordered
        
     >
-      <AnimatedCard content={"vous êtes le premier dans votre équipe "}/>
+      {/* <AnimatedCard content={"vous êtes le premier dans votre équipe "}/> */}
       {/* Statistic Cards in a Single Row */}
       <ProCard
         direction={responsive ? "column" : "row"}
@@ -99,7 +60,7 @@ export default function Overview() {
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude terminer</div>}
   statistic={{
-    value: studyStats.Done,
+    value: studyStats.status.Done,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -111,7 +72,7 @@ export default function Overview() {
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude en cours</div>}
   statistic={{
-    value: studyStats.inProgress,
+    value: studyStats.status.inProgress,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -123,7 +84,7 @@ export default function Overview() {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude En Attend</div>}
   statistic={{
-    value: studyStats.toDo,
+    value: studyStats.status.toDo,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -144,7 +105,7 @@ export default function Overview() {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification effectué</div>}
   statistic={{
-    value: 234,
+    value: studyStats.typeEtude.Retouche,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -156,7 +117,7 @@ export default function Overview() {
   className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification Terminer</div>}
   statistic={{
-    value: 234,
+    value: studyStats.retouche.done,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -168,7 +129,7 @@ export default function Overview() {
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification En Cours</div>}
   statistic={{
-    value: 234,
+    value: studyStats.retouche.inProgress,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -180,7 +141,7 @@ export default function Overview() {
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification En Attend</div>}
   statistic={{
-    value: 234,
+    value: studyStats.retouche.toDo,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />

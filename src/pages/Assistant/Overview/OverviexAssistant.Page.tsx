@@ -6,8 +6,10 @@ import RcResizeObserver from 'rc-resize-observer';
 import { Table,Col,Avatar, Row,Tooltip } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
-
+import { useSelector,useDispatch } from 'react-redux';
 function OverviewAssistant() {
+
+  const {studyStats}=useSelector((state:any)=>state.studies)
   const [responsive, setResponsive] = useState(false);
   const [engineers, setEngineers] = useState([
     { id: 1, name: "Engineer A", tasks: [{ status: 'Todo' }, { status: 'In Progress' }], photo: "/assets/icons/avatar1.svg", studiesReceived: 20, 
@@ -26,6 +28,7 @@ function OverviewAssistant() {
     lastActivityDate: new Date('2023-10-01')},
     // ... more engineers
   ]);
+console.log("====> stats",studyStats);
 
   const determineEngineerStatus = (engineerTasks:any) => {
     const hasInProgressTask = engineerTasks.some((task:any) => task.status === 'In Progress');
@@ -199,9 +202,9 @@ function OverviewAssistant() {
 
 <StatisticCard
   className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
-  title={<div className="flex-1 text-l">Total étude Reçu</div>}
+  title={<div className="flex-1 text-l">Total étude </div>}
   statistic={{
-    value: 234,
+    value: studyStats.total,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -209,7 +212,7 @@ function OverviewAssistant() {
     ),
   }}
 />
-        <StatisticCard
+  {/* <StatisticCard
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude Dispatché</div>}
   statistic={{
@@ -220,12 +223,12 @@ function OverviewAssistant() {
       </div>
     ),
   }}
-/>
+/> */}
         <StatisticCard
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total noveaux étude </div>}
   statistic={{
-    value: 56,
+    value: studyStats.typeEtude.NouvelleEtude,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -237,7 +240,7 @@ function OverviewAssistant() {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude Modifier</div>}
   statistic={{
-    value: 56,
+    value: studyStats.typeEtude.Retouche,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />

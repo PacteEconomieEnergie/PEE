@@ -1,12 +1,25 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { routes } from "./Router/MainRoutes";
+import { useDispatch,useSelector } from "react-redux";
+import { fetchAllStudies,fetchStudiesByUserId } from "./store/studies/studySlice";
+import { AppDispatch } from "./store";
 import { AppLayout } from "./Layout/AppLayout";
 import ProtectedRoute from "./Router/ProtectedRoute";
 import { NotificationProvider } from "./Contexts/NotificationContext";
 import { UserSessionProvider } from "./modules/UserSessionProvider/UserSessionProvider.module";
 const App: React.FC = () => {
- 
+  const userId=useSelector((state:any)=>state?.auth?.id)
+  const IdUser=localStorage.getItem('userId')
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchAllStudies());
+    const IdUserNumber = IdUser ? Number(IdUser) : null
+    if (IdUserNumber !== null) {
+      dispatch(fetchStudiesByUserId(IdUserNumber));
+    } // Assuming you have the userId available
+  }, [dispatch, userId]);
 
   return (
   

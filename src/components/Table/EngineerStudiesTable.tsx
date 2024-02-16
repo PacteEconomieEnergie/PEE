@@ -15,8 +15,10 @@ interface StudiesTableProps {
   }
 const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
   const dispatch = useDispatch();
-  const apiUrl =  "http://localhost:3002";
+  const apiUrl =  window.REACT_APP_SERVER_URL;
   const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
+
+
   const downloadFile = (fileId: any) => {
     const downloadUrl = `${apiUrl}/api/download/${fileId}`;
     const anchor = document.createElement("a");
@@ -42,24 +44,24 @@ console.log("===> Studies",studies);
     </Menu>
   );
 
-  const renderClientName = (text: any, record: any) => {
-    return record.studies.client.ClientName;
-  };
+  // const renderClientName = (text: any, record: any) => {
+  //   return record.studies.client.ClientName;
+  // };
 
-  const renderEngineerEmail = (text: any, record: any) => {
-    return record.studies.users_has_studies[0]?.users.Email;
-  };
+  // const renderEngineerEmail = (text: any, record: any) => {
+  //   return record.studies.users_has_studies[0]?.users.Email;
+  // };
 
-  const renderSyntheseDownloadButton = (record: any) => {
-    console.log("Record : ", record);
+  // const renderSyntheseDownloadButton = (record: any) => {
+  //   console.log("Record : ", record);
     
-    const syntheseFile =record.studies.files.find((file:any) => file.isSynthese);
-    return syntheseFile ? (
-      <Button onClick={() => downloadFile(syntheseFile.idFiles)}>
-        <DownloadOutlined /> Synthèse
-      </Button>
-    ) : null;
-  };
+  //   const syntheseFile =record.studies.files.find((file:any) => file.isSynthese);
+  //   return syntheseFile ? (
+  //     <Button onClick={() => downloadFile(syntheseFile.idFiles)}>
+  //       <DownloadOutlined /> Synthèse
+  //     </Button>
+  //   ) : null;
+  // };
   const renderFiles = (files:any) => {
     return files.map((file:any, index:any) => {
       if (file.isSynthese) {

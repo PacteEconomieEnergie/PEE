@@ -13,7 +13,7 @@ const RingProgress: React.FC<RingProgressProps> = ({ status, percent }) => {
   
   const conicColors = { "0%": "#87d068", "50%": "#ffe58f", "100%": "#ffccc7" };
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ position: 'relative', display: 'inline-block' }} className='font-semibold'>
       <Progress type="dashboard" percent={percent} strokeColor={conicColors} />
       <div style={{
         position: 'absolute',

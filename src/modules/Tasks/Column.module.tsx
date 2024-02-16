@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Task from './Task.module';
 import { Column as ColumnType } from './TaskTypes';
@@ -10,8 +10,8 @@ interface ColumnProps {
 }
 
 const Column: React.FC<ColumnProps> = ({ column, loading }) => {
-  console.log("===>3",loading);
   
+  useEffect(()=>{},[loading])
   return (
     <div className="bg-gray-200 rounded-lg shadow w-96 min-w-96 p-4 flex flex-col gap-4">
     <h2 className="text-lg font-bold mb-3">{column.name}</h2>
