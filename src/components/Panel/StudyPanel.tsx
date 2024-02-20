@@ -19,10 +19,11 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
       dispatch(closeStudySidePanel());
     };
  
-  
+    const apiUrl =  "http://localhost:3002";
+    // const apiUrl =  window.REACT_APP_SERVER_URL;
     const downloadFile = (fileId:any, fileName:any) => {
       // Implement the download logic here
-      const downloadUrl = `/api/download/${fileId}`;
+      const downloadUrl = `${apiUrl}/api/download/${fileId}`;
       const anchor = document.createElement('a');
       anchor.href = downloadUrl;
       anchor.download = fileName || 'file';
