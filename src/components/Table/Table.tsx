@@ -9,6 +9,7 @@ import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
 const { Column } = Table;
 const apiUrl =  "http://localhost:3002";
+// const apiUrl =  window.REACT_APP_SERVER_URL;
 interface StudiesTableProps {
   studies?: any[]; // Adjust the type according to your data structure
   onActionClick?: (action: string, record: any) => void;

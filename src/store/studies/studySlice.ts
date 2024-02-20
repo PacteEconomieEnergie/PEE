@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import studyService from '../../Services/Api/Studies/StudiesService';
+import { stat } from 'fs';
 
 interface StudyState {
     studies: any[];
@@ -84,6 +85,8 @@ export const fetchAllStudies = createAsyncThunk(
         try {
             const response:any = await studyService.getAllStudies();
             const stats = calculateStatistics(response);
+            console.log(stats);
+            
             return { studies: response, stats };
         } catch (error: any) {
             return rejectWithValue(error.response.data);
@@ -133,8 +136,8 @@ const studySlice = createSlice({
         })
         .addCase(fetchStudiesByUserId.fulfilled, (state:any, action:any) => {
             state.userStudies = action.payload.userStudies;
-        state.userStudyStats = action.payload.userStats; // Update user-specific study statistics with the calculated stats
-        state.loading = false;
+            state.userStudyStats = action.payload.userStats; // Update user-specific study statistics with the calculated stats
+            state.loading = false;
         })
         .addCase(fetchStudiesByUserId.rejected, (state:any, action:any) => {
             state.error = action.payload;
@@ -150,9 +153,11 @@ export default studySlice.reducer;
 
 function calculateStatistics(studies: any[]): StudyStatistics {
     let stats: StudyStatistics = JSON.parse(JSON.stringify(initialStats)); // Deep copy to avoid mutation
-console.log("===> calculations",studies);
+
 
     studies.forEach((study: any) => {
+      console.log(study,"from the slice");
+      
         stats.total += 1;
 
         // Safely increment status, ensuring the key exists
