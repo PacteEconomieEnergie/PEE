@@ -1,66 +1,66 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
 import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
 import RcResizeObserver from 'rc-resize-observer';
-import { Table,Col,Avatar, Row,Tooltip } from 'antd';
+import { Table,Col,Avatar, Row,Tooltip, Tag } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
 import { useSelector,useDispatch } from 'react-redux';
+import studyService from '../../../Services/Api/Studies/StudiesService';
 function OverviewAssistant() {
 
   const {studyStats}=useSelector((state:any)=>state.studies)
   const [responsive, setResponsive] = useState(false);
-  const [engineers, setEngineers] = useState([
-    { id: 1, name: "Engineer A", tasks: [{ status: 'Todo' }, { status: 'In Progress' }], photo: "/assets/icons/avatar1.svg", studiesReceived: 20, 
-    studiesCompleted: 15, 
-    studiesInProgress: 3
-    ,studiesToDo:2, lastActivityDate: new Date('2023-08-01') },
-    { id: 2, name: "Engineer B", tasks: [{ status: 'Done' }], photo: "/assets/icons/avatar2.svg", studiesReceived: 10, 
-    studiesCompleted: 10, 
-    studiesInProgress: 3
-    ,studiesToDo:2, lastActivityDate: new Date('2023-08-10') },
-    { id: 3, name: "Engineer C", tasks: [{ status: 'Todo' }], photo: "/assets/icons/avatar1.svg" ,studiesReceived: 2,lastActivityDate: new Date('2023-09-01') },
-    { id: 4, name: "Engineer D", tasks: [], photo: "/assets/icons/avatar2.svg" , studiesReceived: 30, 
-    studiesCompleted: 5, 
-    studiesInProgress: 3
-    ,studiesToDo:2,
-    lastActivityDate: new Date('2023-10-01')},
-    // ... more engineers
-  ]);
-console.log("====> stats",studyStats);
+  const [engineers, setEngineers] = useState([]);
 
-  const determineEngineerStatus = (engineerTasks:any) => {
-    const hasInProgressTask = engineerTasks.some((task:any) => task.status === 'In Progress');
-    const hasTodoTask = engineerTasks.some((task:any) => task.status === 'Todo');
-    const hasDoneTask = engineerTasks.some((task:any) => task.status === 'Done');
+useEffect(() => {
+  studyService.getEngineersStudies().then((response:any) => {
+   
+    setEngineers(response);
+  }).catch((error) => {
+    console.error("Error fetching engineers' studies:", error);
+  });
+}, []);
+
+
+const determineEngineerStatus = (engineer:any) => {
+  // Assuming that engineer object includes counts for studiesReceived, studiesCompleted, studiesInProgress, and studiesToDo
+  const { studiesReceived, studiesCompleted, studiesInProgress, studiesToDo } = engineer;
+
   
-    if (hasInProgressTask || hasTodoTask) {
-      return 'inProgress';
-    } else if (hasDoneTask && !hasInProgressTask && !hasTodoTask) {
-      return 'done';
-    } else {
-      return 'available';
-    }
-  };
+
+  if (studiesReceived === studiesCompleted) {
+    return 'ready'; // Ready for new studies
+  } else if (studiesInProgress ) {
+    return 'inProgress';
+  } else if (studiesCompleted > studiesToDo) {
+    return 'available';
+  } else {
+    return 'available'; // Default to available if none of the above conditions match
+  }
+};
   
-  const getStatusIcon = (status:any) => {
+  const getStatusIcon = (status:any, engineer:any) => {
     let icon;
     let tooltipText;
+  
+    // Extracting study counts from the engineer object
+    const { studiesReceived, studiesCompleted, studiesInProgress, studiesToDo } = engineer;
   
     switch (status) {
       case 'inProgress':
         icon = <SyncOutlined spin style={{ color: 'orange' }} />;
-        tooltipText = "In Progress";
+        tooltipText = `In Progress: ${studiesInProgress} study/studies`;
         break;
-      case 'done':
+      case 'ready':
         icon = <CheckCircleOutlined style={{ color: 'green' }} />;
-        tooltipText = "Done";
+        tooltipText = `Ready for new studies. Completed: ${studiesCompleted}/${studiesReceived} received`;
         break;
       case 'available':
       default:
         icon = <ClockCircleOutlined style={{ color: 'blue' }} />;
-        tooltipText = "Available";
+        tooltipText = `Available. To Do: ${studiesToDo}, Completed: ${studiesCompleted}`;
         break;
     }
   
@@ -72,6 +72,7 @@ console.log("====> stats",studyStats);
       </Tooltip>
     );
   };
+  
   const isWithinTimeFrame = (date:any, timeFrame:any) => {
     const now = new Date();
     const targetDate = new Date(date);
@@ -89,13 +90,17 @@ console.log("====> stats",studyStats);
         return true;
     }
   };
+
+
   const columns = [
     {
       title: 'User',
       dataIndex: 'name',
       key: 'name',
       render: (text:any, record:any) => (
+        
         <div style={{ display: 'flex', alignItems: 'center' }}>
+          
           <Avatar src={record.photo} />
           <span style={{ marginLeft: 8 }}>{text}</span>
         </div>
@@ -107,7 +112,7 @@ console.log("====> stats",studyStats);
       key: 'status',
       render: (_:any, engineer:any) => (
         <div style={{ textAlign: 'center' }}>
-          {getStatusIcon(determineEngineerStatus(engineer.tasks))}
+          {getStatusIcon(determineEngineerStatus(engineer), engineer)}
         </div>
       ),
     },
@@ -145,21 +150,53 @@ console.log("====> stats",studyStats);
         <div style={{ textAlign: 'center' }}>{studiesToDo}</div>
       ),
     },
-    {
-      title: 'Last Activity',
-      dataIndex: 'lastActivityDate',
-      render: (date:any) => date.toLocaleDateString(),
-      filters: [
-        { text: 'Day', value: 'day' },
-        { text: 'Week', value: 'week' },
-        { text: 'Month', value: 'month' }
-      ],
-      onFilter: (value:any, record:any) => isWithinTimeFrame(record.lastActivityDate, value),
-    },
+    // {
+    //   title: 'Studies',
+    //   key: 'studies',
+    //   render: (text:any, record:any) => (
+    //     <div>
+    //       {record.tasks.length > 0 ? record.tasks.map((task:any, index:any) => (
+    //         <div key={index} style={{ marginBottom: '10px' }}>
+    //           <p><strong>ID:</strong> {task.IdStudy}, <strong>Type:</strong> {task.type}, <strong>Status:</strong> <Tag color={getStudyStatusColor(task.Status)}>{task.Status}</Tag>, <strong>Client:</strong> {task.client.name}</p>
+    //         </div>
+    //       )) : <p>No studies assigned.</p>}
+    //     </div>
+    //   ),
+    // }
+    // {
+    //   title: 'Last Activity',
+    //   dataIndex: 'lastActivityDate',
+    //   render: (date:any) => date.toLocaleDateString(),
+    //   filters: [
+    //     { text: 'Day', value: 'day' },
+    //     { text: 'Week', value: 'week' },
+    //     { text: 'Month', value: 'month' }
+    //   ],
+    //   onFilter: (value:any, record:any) => isWithinTimeFrame(record.lastActivityDate, value),
+    // },
+    // {
+    //   title: 'Studies',
+    //   key: 'studies',
+    //   render: (_:any, record:any) => (
+    //     record.tasks.map((task:any, index:any) => (
+    //       <div key={index}>
+    //         <Tag color={getStudyStatusColor(task.Status)}>{task.title}: {task.Status}</Tag>
+    //         <p>Client: {task.client.name}</p>
+    //       </div>
+    //     ))
+    //   ),
+    // },
   ];
 
 
-
+  const getStudyStatusColor = (status:any) => {
+    switch (status) {
+      case 'Done': return 'green';
+      case 'inProgress': return 'orange';
+      case 'toDo': return 'red';
+      default: return 'default';
+    }
+  };
 
 
 
@@ -168,10 +205,10 @@ console.log("====> stats",studyStats);
 
 
   const paginationConfig = {
-    defaultPageSize: 10,
+    defaultPageSize: 5,
     showSizeChanger: true,
-    pageSizeOptions: ['10', '20', '30'],
-    showQuickJumper: true,
+    pageSizeOptions: ['5','10', '20', '30'],
+    
   };
 
 
@@ -212,18 +249,7 @@ console.log("====> stats",studyStats);
     ),
   }}
 />
-  {/* <StatisticCard
-  className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
-  title={<div className="flex-1 text-l">Total étude Dispatché</div>}
-  statistic={{
-    value: 34,
-    prefix: (
-      <div className="absolute top-10 right-6  ">
-        <InfoCircleOutlined className="text-white text-2xl" />
-      </div>
-    ),
-  }}
-/> */}
+  
         <StatisticCard
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total noveaux étude </div>}

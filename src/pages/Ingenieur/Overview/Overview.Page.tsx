@@ -9,14 +9,15 @@ import RingProgress from '../../../components/Charts/RingProgress';
 import { Progress, Space } from "antd";
 export default function Overview() {
   const conicColors = { "0%": "#87d068", "50%": "#ffe58f", "100%": "#ffccc7" };
-  const { userStudies, loading, error,studyStats } = useSelector((state: any) => state.studies);
+  const { userStudies, loading, error,userStudyStats } = useSelector((state: any) => state.studies);
 
   const [responsive, setResponsive] = useState(false);
 
+console.log(userStudyStats?.total,'the user study stats');
 
-  const donePercentage = studyStats.total > 0 ? (studyStats.status.Done / studyStats.total) * 100 : 0;
-  const inProgressPercentage = studyStats.total > 0 ? (studyStats.status.inProgress / studyStats.total) * 100 : 0;
-  const toDoPercentage = studyStats.total > 0 ? (studyStats.status.toDo / studyStats.total) * 100 : 0;
+  const donePercentage = userStudyStats?.total > 0 ? (userStudyStats.status.Done / userStudyStats.total) * 100 : 0;
+  const inProgressPercentage = userStudyStats.total > 0 ? (userStudyStats.status.inProgress / userStudyStats.total) * 100 : 0;
+  const toDoPercentage = userStudyStats.total > 0 ? (userStudyStats.status.toDo / userStudyStats.total) * 100 : 0;
 
   
   return (
@@ -48,7 +49,7 @@ export default function Overview() {
   className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude effectué</div>}
   statistic={{
-    value: studyStats.total,
+    value: userStudyStats.total,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -60,7 +61,7 @@ export default function Overview() {
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude terminer</div>}
   statistic={{
-    value: studyStats.status.Done,
+    value: userStudyStats.status.Done,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -72,7 +73,7 @@ export default function Overview() {
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude en cours</div>}
   statistic={{
-    value: studyStats.status.inProgress,
+    value: userStudyStats.status.inProgress,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -84,7 +85,7 @@ export default function Overview() {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude En Attend</div>}
   statistic={{
-    value: studyStats.status.toDo,
+    value: userStudyStats.status.toDo,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -105,7 +106,7 @@ export default function Overview() {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification effectué</div>}
   statistic={{
-    value: studyStats.typeEtude.Retouche,
+    value: userStudyStats.typeEtude.Retouche,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -117,7 +118,7 @@ export default function Overview() {
   className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification Terminer</div>}
   statistic={{
-    value: studyStats.retouche.done,
+    value: userStudyStats.retouche.done,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -129,7 +130,7 @@ export default function Overview() {
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification En Cours</div>}
   statistic={{
-    value: studyStats.retouche.inProgress,
+    value: userStudyStats.retouche.inProgress,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -141,7 +142,7 @@ export default function Overview() {
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Modification En Attend</div>}
   statistic={{
-    value: studyStats.retouche.toDo,
+    value: userStudyStats.retouche.toDo,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />

@@ -17,6 +17,7 @@ class Interceptor {
   
         this.axiosInstance.interceptors.request.use(
             // @ts-ignore
+            
             (config: AxiosRequestConfig<any>) => {
                 if (!(config.data instanceof FormData)) {
                     config.headers = { ...config.headers, 'Content-Type': 'application/json' };
@@ -29,6 +30,7 @@ class Interceptor {
                 }
                 return config;
             },
+            
             (error) => {
                 return Promise.reject(error);
             }

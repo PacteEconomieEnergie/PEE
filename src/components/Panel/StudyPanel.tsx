@@ -12,8 +12,7 @@ interface StudySidePanelProps {
 const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onClose }) => {
     // const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
     const dispatch = useDispatch();
-  console.log(studyData
-    ,"from the study panel");
+  console.log(studyData,"from the study panel");
   
     const handleClose = () => {
       dispatch(closeStudySidePanel());
@@ -43,6 +42,7 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
         </Button>
       );
     };
+  console.log(studyData,"from the study panel");
   
     const renderFilesSection = (files:any) => {
       return (
@@ -68,14 +68,14 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
         width={400}
       >
         <Descriptions column={1} bordered>
-          <Descriptions.Item label="Date De Soumission">{studyData?.studyData.studyData.studies.DateDeSoumission.substring(0,10)}</Descriptions.Item>
-          <Descriptions.Item label="Name">{studyData.studyData.studyData.studies.FullName}</Descriptions.Item>
-          <Descriptions.Item label="Type">{studyData.studyData.studyData.studies.TypeEtude}</Descriptions.Item>
-          <Descriptions.Item label="Category">{studyData.studyData.studyData.studies.Category}</Descriptions.Item>
-          <Descriptions.Item label="Nature">{studyData.studyData.studyData.studies.Nature}</Descriptions.Item>
-          <Descriptions.Item label="Client">{studyData.studyData.studyData.studies.client?.ClientName}</Descriptions.Item>
+          <Descriptions.Item label="Date De Soumission">{studyData?.studyData.studyData.DateDeSoumission.substring(0,10)}</Descriptions.Item>
+          <Descriptions.Item label="Name">{studyData.studyData.studyData.FullName}</Descriptions.Item>
+          <Descriptions.Item label="Type">{studyData.studyData.studyData.TypeEtude}</Descriptions.Item>
+          <Descriptions.Item label="Category">{studyData.studyData.studyData.Category}</Descriptions.Item>
+          <Descriptions.Item label="Nature">{studyData.studyData.studyData.Nature}</Descriptions.Item>
+          <Descriptions.Item label="Client">{studyData.studyData.studyData.client?.ClientName}</Descriptions.Item>
           {/* Render other study data as needed */}
-          {studyData.studyData.studyData.studies.files && studyData.studyData.studyData.studies.files.length > 0 && renderFilesSection(studyData.studyData.studyData.studies.files)}
+          {studyData.studyData.studyData.files && studyData.studyData.studyData.files.length > 0 && renderFilesSection(studyData.studyData.studyData.files)}
         </Descriptions>
         <Button onClick={handleClose} style={{ marginTop: 16 }}>
           Close
