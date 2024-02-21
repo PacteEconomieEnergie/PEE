@@ -33,7 +33,7 @@ const studyService={
     async updateStudyStatus(studyId:number,newStaus:any){
         console.log("====>",newStaus,'the new Status');
         
-        return   axiosInstance.patch(`/studies/${studyId}`,{Status:newStaus})
+        return   axiosInstance.patch(`/studies/${studyId}/status`,{Status:newStaus})
     },
     async uploadSyntheseFile (studyId:number,file:Blob){
         const formData = new FormData();
@@ -44,6 +44,10 @@ const studyService={
                 'Content-Type': undefined
             }
         })
+    },
+    async getEngineersStudies() {
+        // Adjust the URL if your endpoint for fetching engineers' studies is different
+        return axiosInstance.get(`/studies/engineers`);
     }
 }
 

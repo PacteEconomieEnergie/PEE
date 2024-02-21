@@ -84,8 +84,10 @@ export const fetchAllStudies = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response:any = await studyService.getAllStudies();
+            
+            
             const stats = calculateStatistics(response);
-            console.log(stats);
+            
             
             return { studies: response, stats };
         } catch (error: any) {
@@ -98,10 +100,17 @@ export const fetchStudiesByUserId = createAsyncThunk(
     'study/fetchByUserId',
     async (userId: number, { rejectWithValue }) => {
         try {
-            const response:any = await studyService.getStudyByIdUser(userId);
-            const userStats = calculateStatistics(response);
-            return { userStudies: response, userStats };
-        } catch (error: any) {
+          const response: any = await studyService.getStudyByIdUser(userId);
+          // console.log("Response from getStudyByIdUser:", response);
+          
+          // Map over the response to extract study objects
+          const userStudies = response.map((item: any) => item.studies);
+          
+          const userStats = calculateStatistics(userStudies); // Now passing an array of study objects
+          
+          
+          return { userStudies: userStudies, userStats };
+      } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -155,9 +164,13 @@ function calculateStatistics(studies: any[]): StudyStatistics {
     let stats: StudyStatistics = JSON.parse(JSON.stringify(initialStats)); // Deep copy to avoid mutation
 
 
-    studies.forEach((study: any) => {
-      console.log(study,"from the slice");
-      
+    studies.forEach((study : any) => {
+      // const study = item.studies;
+      if (study.Status === undefined || study.TypeEtude === undefined) {
+        console.warn("Skipping study with undefined Status or TypeEtude", study);
+        return; // Skip this iteration
+    }
+      // console.log(`Processing study with Status: ${study.Status}, TypeEtude: ${study.TypeEtude}`);
         stats.total += 1;
 
         // Safely increment status, ensuring the key exists
@@ -181,7 +194,7 @@ function calculateStatistics(studies: any[]): StudyStatistics {
         }
         if (study.TypeEtude === "retouche") {
             switch (study.Status) {
-              case "done":
+              case "Done":
                 stats.retouche.done += 1;
                 break;
               case "inProgress":
@@ -193,6 +206,7 @@ function calculateStatistics(studies: any[]): StudyStatistics {
               // Add other statuses if necessary
             }
           }
+          // console.log(`After processing, stats:`, stats);
     });
 
     return stats;

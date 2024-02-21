@@ -15,8 +15,10 @@ interface StudiesTableProps {
   }
 const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
   const dispatch = useDispatch();
-  const apiUrl =  window.REACT_APP_SERVER_URL;
+  const apiUrl =  "http://localhost:3002";
+  // const apiUrl =  window.REACT_APP_SERVER_URL;
   const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
+console.log("===> Studies",studies);
 
 
   const downloadFile = (fileId: any) => {
@@ -28,7 +30,7 @@ const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
     anchor.click();
     document.body.removeChild(anchor);
   };
-console.log("===> Studies",studies);
+
 
   const handleActionClick = (record: any) => {
     dispatch(showStudySidePanel({ visible: true, studyData: record }));
@@ -63,7 +65,7 @@ console.log("===> Studies",studies);
   //   ) : null;
   // };
   const renderFiles = (files:any) => {
-    return files.map((file:any, index:any) => {
+    return files?.map((file:any, index:any) => {
       if (file.isSynthese) {
         return (
           <Tooltip title="Download Synthèse" key={file.idFiles}>
@@ -85,32 +87,34 @@ console.log("===> Studies",studies);
         <div className="flex justify-center">
           <div className="w-full">
           <Table dataSource={studies} rowKey="Studies_IdStudies">
-          <Column title="Created At" dataIndex={["studies", "createdAt"]} key="createdAt" render={(text) => new Date(text).toLocaleDateString()} />
-          <Column title="Created By" dataIndex={["studies", "createdByUser","Email"]}  key="CreatedBy" render={text => text ? text : "N/A"} />
-          <Column title="Type d'Étude" dataIndex={["studies", "TypeEtude"]}  key="TypeEtude" />
-          <Column title="Nature" dataIndex={["studies", "Nature"]}  key="Nature" />
-          <Column title="Client" dataIndex={["studies", "client", "ClientName"]}  key="client.ClientName" />
-          <Column title="Status" dataIndex={["studies", "Status"]}  key="Status" />
+          <Column title="Created At" dataIndex={[ "createdAt"]} key="createdAt" render={(text) => new Date(text).toLocaleDateString()} />
+          <Column title="Created By" dataIndex={[ "createdByUser","Email"]}  key="CreatedBy" render={text => text ? text : "N/A"} />
+          <Column title="Type d'Étude" dataIndex={[ "TypeEtude"]}  key="TypeEtude" />
+          <Column title="Nature" dataIndex={[ "Nature"]}  key="Nature" />
+          <Column title="Client" dataIndex={[ "client", "ClientName"]}  key="client.ClientName" />
+          <Column title="Status" dataIndex={[ "Status"]}  key="Status" />
           <Column
             title="Files"
             key="files"
-            render={(text, record:any) => renderFiles(record.studies.files)}
+            render={(text, record:any) => renderFiles(record?.files)}
           />
           <Column
             title="Type de Retouche"
             dataIndex="studies.TypeDeRetouche"
             key="TypeDeRetouche"
-            render={(text, record:any) => record.studies.TypeEtude === "Retouche" ? text : "cette étude ne conteint pas de retouche"}
+            render={(text, record:any) => record?.TypeEtude === "Retouche" ? text : "cette étude ne conteint pas de retouche"}
           />
           <Column
             title="Nombre de Retouche"
-            dataIndex={["studies", "NomberDeRetouche"]}
+            dataIndex={[ "NomberDeRetouche"]}
             key="NomberDeRetouche"
             render={(text, record:any) => {
+              console.log(record, "record");
+              
                 // Check if the TypeEtude is "Retouche"
-                const isRetouche = record.studies.TypeEtude === "Retouche";
+                const isRetouche = record?.TypeEtude === "Retouche";
                 // Display the number of retouches if TypeEtude is "Retouche", otherwise display "Non"
-                return isRetouche ? record.studies.NomberDeRetouche : "Non";
+                return isRetouche ? record?.NomberDeRetouche : "Non";
               }}
           />
               {/* <Column
