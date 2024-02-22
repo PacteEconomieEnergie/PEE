@@ -8,7 +8,7 @@ import NotificationPanel from '../../components/Panel/NotificationPanel';
 import MessagePanel from '../../components/Panel/MessagePanel';
 import ProfileDropdown from '../../components/Dropdown/ProfileDropdown';
 import { logout } from '../../store/auth/authSlice'; // Update path as needed
-
+import { useNotifications } from '../../Contexts/NotificationContext';
 interface HeaderContentProps {
   notifications: Array<{ id: string; message: string }>;
   messages: Array<{ id: string; message: string }>;
@@ -16,9 +16,10 @@ interface HeaderContentProps {
 
 }
 
-export const HeaderContent: React.FC<HeaderContentProps> = ({ notifications, messages, userName }) => {
+export const HeaderContent: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { notifications } = useNotifications();
   const userLogged=useSelector((state:any)=>state.auth)
  
   
@@ -37,7 +38,7 @@ export const HeaderContent: React.FC<HeaderContentProps> = ({ notifications, mes
         </Badge>
       </Dropdown>
       
-      <ProfileDropdown userName={userName} userEmail={userLogged.Email} onLogout={handleLogout} />
+      <ProfileDropdown userName={userLogged.userName} userEmail={userLogged.Email} onLogout={handleLogout} />
     </div>
   );
 };

@@ -90,7 +90,7 @@ export const IngenieurLayout: React.FC<IngenieurLayoutProps> = ({ children }) =>
             title="Ingenieur Dashboard"
             fixedHeader={true}
             logo={<img src="/images/logoPee.png" alt="Company Logo" />}
-            headerContentRender={() => <HeaderContent {...headerContentProps} />}
+            headerContentRender={() => <HeaderContent  />}
         >
             <PageContainer>
                 {children}

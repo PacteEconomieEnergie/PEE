@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DashboardOutlined,SettingOutlined, CalendarOutlined, UserOutlined, LogoutOutlined ,BellOutlined,
-    MailOutlined,BookOutlined} from '@ant-design/icons';
+import { DashboardOutlined,SettingOutlined, UserOutlined,BookOutlined} from '@ant-design/icons';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Link } from 'react-router-dom';
-import {Dropdown, Menu, Space, Badge,Popover,List, Avatar, Button} from 'antd'
+
 import { useDispatch } from 'react-redux';
-import { logout } from '../store/auth/authSlice';
+
 import { HeaderContent } from '../modules/Header/Header.module';
 import type { ProSettings } from '@ant-design/pro-components';
 
@@ -35,7 +34,7 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
         }));
     };
     const headerContentProps = {
-      notifications: [{ id: '1', message: 'Notification 1' },{ id: '2', message: 'Notification 2' }], // Your notifications data specific to Ingenieur layout
+      notifications: [{ id: '2', message: 'Notification 2' }], // Your notifications data specific to Ingenieur layout
       messages: [
         { id: '1', message: 'New message from John' },
         { id: '2', message: 'Reminder for tomorrow\'s meeting' },
@@ -59,12 +58,12 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
           label: 'Studies',
             link: '/assistant/Studies',
         },
-        {
-            key: 'appointments',
-            icon: <CalendarOutlined className="h-8 w-8" />,
-            label: 'Appointments',
-            link: '/assistant/appointments',
-        },
+        // {
+        //     key: 'appointments',
+        //     icon: <CalendarOutlined className="h-8 w-8" />,
+        //     label: 'Appointments',
+        //     link: '/assistant/appointments',
+        // },
         {
             key: 'clients',
             icon: <UserOutlined className="h-8 w-8" />,
@@ -97,7 +96,7 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
             title="PEE"
             
             logo={<img src="/images/logoPee.png" alt="Company Logo" />} // Change to your assistant logo
-            headerContentRender={() => <HeaderContent {...headerContentProps} />}
+            headerContentRender={() => <HeaderContent  />}
         >
             <PageContainer>
                 {children}

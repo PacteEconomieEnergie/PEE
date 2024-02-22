@@ -125,7 +125,7 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
     collapsed={collapsed}
       onCollapse={setCollapsed}
 
-      headerContentRender={() => <HeaderContent {...headerContentProps} />}
+      headerContentRender={() => <HeaderContent  />}
 
    >
    
