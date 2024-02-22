@@ -99,11 +99,19 @@ class ApiService {
           throw error;
         }
       }
-    
+    public async getClientsStudies(): Promise<any> {
+        try {
+          const response = await this.axiosInstance.get("/clients/studies");
+          return response
+        } catch (error) {
+          throw error;
+        }
+      }
+    }
 
     // You can add more methods for other API requests as needed
 
     // ...
-}
+
 
 export default new ApiService();
