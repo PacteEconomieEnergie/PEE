@@ -23,9 +23,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         if (socketRef.current) {
             socketRef.current.disconnect();
         }
-        console.log("REACT_APP_SERVER_URL:", window.REACT_APP_SERVER_URL, "Final URL:", window.REACT_APP_SERVER_URL || 'http://localhost:3002');
+        // console.log("REACT_APP_SERVER_URL:", window.REACT_APP_SERVER_URL, "Final URL:", window.REACT_APP_SERVER_URL || 'http://localhost:3002');
         // Establish a new socket connection
-        socketRef.current = io("http://localhost:3002", {
+        socketRef.current = io(window.REACT_APP_SERVER_URL, {
             auth: { token: authToken },
         });
 

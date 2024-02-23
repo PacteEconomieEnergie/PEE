@@ -15,8 +15,8 @@ interface StudiesTableProps {
   }
 const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
   const dispatch = useDispatch();
-  const apiUrl =  "http://localhost:3002";
-  // const apiUrl =  window.REACT_APP_SERVER_URL;
+  // const apiUrl =  "http://localhost:3002";
+  const apiUrl =  window.REACT_APP_SERVER_URL;
   const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
 console.log("===> Studies",studies);
 

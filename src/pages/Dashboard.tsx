@@ -1,13 +1,27 @@
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
 import RcResizeObserver from 'rc-resize-observer';
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import ClientStudyChart from '../components/Charts/ChartLine';
 import LiquidChart from '../components/Charts/LiquidChart';
+import adminService from '../Services/Api/adminService';
+import { set } from 'date-fns';
 const { Statistic } = StatisticCard;
 export default () => {
   const [responsive, setResponsive] = useState(false);
-
+  const [stats, setStats] = useState({
+    engineersCount: 0,
+    assistantsCount: 0,
+    clientsCount: 0,
+    studiesCount: 0,
+  });
+  useEffect(() => {
+    adminService.fetchDashboardData().then((response) => {
+      setStats(response);
+    });
+  }, []);
+  console.log(stats, 'the stats');
+  
   return (
     <RcResizeObserver
     key="resize-observer"
@@ -33,7 +47,7 @@ export default () => {
   className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Ingénieur</div>}
   statistic={{
-    value: 234,
+    value: stats.engineersCount,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -45,7 +59,7 @@ export default () => {
   className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total client</div>}
   statistic={{
-    value: 34,
+    value: stats.clientsCount,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -57,7 +71,7 @@ export default () => {
   className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude</div>}
   statistic={{
-    value: 56,
+    value: stats.studiesCount,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />
@@ -69,7 +83,7 @@ export default () => {
   className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total assistant</div>}
   statistic={{
-    value: 134,
+    value: stats.assistantsCount,
     prefix: (
       <div className="absolute top-10 right-6  ">
         <InfoCircleOutlined className="text-white text-2xl" />

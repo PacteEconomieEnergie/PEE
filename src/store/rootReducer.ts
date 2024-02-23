@@ -5,13 +5,16 @@ import studySlice from './studies/studySlice';
 import engineersSlice from './Engineers/engineersSlice';
 import clientSlice from './Clients/clientSlice';
 import studySidePanelSlice from './sidebar/studySidePanelSlice';
+import notificationStudyDetailsSlice from './sidebar/notificationStudyDetailsSlice';
 export const rootReducer = combineReducers({
   sidePanel: sidePanelReducer,
   auth:authSlice,
   studies:studySlice,
   client:clientSlice,
   engineer:engineersSlice,
-  studySidePanel:studySidePanelSlice
+  studySidePanel:studySidePanelSlice,
+  notificationStudyDetails:notificationStudyDetailsSlice,
+
   // other slice reducers will go here
 });
 

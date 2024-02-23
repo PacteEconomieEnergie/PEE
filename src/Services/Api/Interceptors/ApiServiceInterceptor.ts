@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-const apiUrl = "http://localhost:3002"
-// const apiUrl =  window.REACT_APP_SERVER_URL;
+// const apiUrl = "http://localhost:3002"
+const apiUrl =  window.REACT_APP_SERVER_URL;
 
 console.log(window.REACT_APP_SERVER_URL  );
 class Interceptor {

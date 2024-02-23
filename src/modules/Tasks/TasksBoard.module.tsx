@@ -20,6 +20,7 @@ interface TasksBoardProps {
   const studySidePanelVisible = useSelector((state: any) => state.studySidePanel.visible);
   const studySidePanelData = useSelector((state: any) => state.studySidePanel.studyData);
   const dispatch = useDispatch();
+console.log(studySidePanelData);
 
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
 const [selectedStudyId, setSelectedStudyId] = useState<number | null>(null);
