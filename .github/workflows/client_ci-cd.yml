@@ -22,7 +22,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_CLIENT }}:frontApp .
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_CLIENT }}:frontApp 
     - name: Test SSH Connection
       uses: appleboy/ssh-action@master
       with:
