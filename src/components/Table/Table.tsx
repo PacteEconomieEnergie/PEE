@@ -8,8 +8,8 @@ import AddStudyPanel from '../Panel/AddStudyPanel';
 import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
 const { Column } = Table;
-const apiUrl =  "http://localhost:3002";
-// const apiUrl =  window.REACT_APP_SERVER_URL;
+// const apiUrl =  "http://localhost:3002";
+const apiUrl =  window.REACT_APP_SERVER_URL;
 interface StudiesTableProps {
   studies?: any[]; // Adjust the type according to your data structure
   onActionClick?: (action: string, record: any) => void;
@@ -22,7 +22,7 @@ const StudiesTable: React.FC<StudiesTableProps> = ({ studies, onActionClick, onF
   const selectedUser = useSelector((state:any) => state.sidePanel.data);
   const isEditing = useSelector((state:any) => state.sidePanel.isEditing);
   const userRole=useSelector((state:any)=>state.auth.role)
-console.log("===> studies tab",studies);
+
 
   
   const downloadFile = (fileId: any) => {
@@ -98,9 +98,9 @@ console.log("===> studies tab",studies);
     </Menu>
   );
   const fileDownloadButton = (files: any) => {
-    console.log(files);
+ 
     const hasSynthese = files.some((file: any) => {
-      console.log(file.isSynthese);
+   
       
      return file.isSynthese});
     if (files.length === 1) {
@@ -108,7 +108,7 @@ console.log("===> studies tab",studies);
       return <Button onClick={() => downloadFile(files[0].idFiles)}><DownloadOutlined /> Download</Button>;
     }
      else {
-      console.log(files[1].idFiles);
+     
       
       // If there are multiple files, show a dropdown
       return (
@@ -120,7 +120,7 @@ console.log("===> studies tab",studies);
   }
 
   const renderClientName = (text:any, record:any) => {
-    console.log(record,'the client record ');
+    
     
     return record.client.ClientName; // Accessing nested client name
 };
@@ -208,7 +208,7 @@ const renderSyntheseDownloadButton = (files: any[]) => {
           onClose={() => dispatch(closeSidePanel())}
           onSave={(editedData) => {
             // Implement your update logic here
-            console.log('Saving user:', editedData);
+            
             // Call any necessary function to update the user data in your state or backend
 
             // Close the side panel after saving

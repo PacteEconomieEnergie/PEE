@@ -5,8 +5,8 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import ClientStudyChart from '../components/Charts/ChartLine';
 import LiquidChart from '../components/Charts/LiquidChart';
 import adminService from '../Services/Api/adminService';
-import { set } from 'date-fns';
-const { Statistic } = StatisticCard;
+
+// const { Statistic } = StatisticCard;
 export default () => {
   const [responsive, setResponsive] = useState(false);
   const [stats, setStats] = useState({
@@ -20,7 +20,7 @@ export default () => {
       setStats(response);
     });
   }, []);
-  console.log(stats, 'the stats');
+  
   
   return (
     <RcResizeObserver

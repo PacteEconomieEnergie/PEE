@@ -1,15 +1,15 @@
 import React from 'react';
 import { useNotifications } from '../../Contexts/NotificationContext';
 import { useDispatch,useSelector } from 'react-redux';
-import { showStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
+// import { showStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
 import { showNotificationStudyDetails } from '../../store/sidebar/notificationStudyDetailsSlice';
 import { AppDispatch } from '../../store';
 import NotificationStudyDetailsPanel from './NotificationStudyDetailsPanel';
-interface StudyDetails {
-  clientName: string;
-  Nature: string;
-  TypeEtude: string;
-}
+// interface StudyDetails {
+//   clientName: string;
+//   Nature: string;
+//   TypeEtude: string;
+// }
 
 interface Notification {
   id: number;
@@ -38,7 +38,7 @@ const NotificationPanel: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { visible, studyDetails } = useSelector((state:any) => state.notificationStudyDetails);
   const { notifications } = useNotifications();
-// console.log(notifications,"from the notification panel");
+
 const handleOpenStudyDetails = (studyData: any) => {
   // Dispatch the action with the study data to show the details panel
   dispatch(showNotificationStudyDetails(studyData));

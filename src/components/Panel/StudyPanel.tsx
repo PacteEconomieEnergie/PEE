@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, Descriptions, Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 import { closeStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
 
 interface StudySidePanelProps {
@@ -12,14 +12,14 @@ interface StudySidePanelProps {
 const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onClose }) => {
     // const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
     const dispatch = useDispatch();
-  console.log(studyData,"from the study panel");
+ 
   
     const handleClose = () => {
       dispatch(closeStudySidePanel());
     };
  
-    const apiUrl =  "http://localhost:3002";
-    // const apiUrl =  window.REACT_APP_SERVER_URL;
+    // const apiUrl =  "http://localhost:3002";
+    const apiUrl =  window.REACT_APP_SERVER_URL;
     const downloadFile = (fileId:any, fileName:any) => {
       // Implement the download logic here
       const downloadUrl = `${apiUrl}/api/download/${fileId}`;
@@ -42,7 +42,7 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
         </Button>
       );
     };
-  console.log(studyData,"from the study panel");
+ 
   
     const renderFilesSection = (files:any) => {
       return (

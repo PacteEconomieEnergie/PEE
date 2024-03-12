@@ -1,5 +1,5 @@
 import ApiServiceInterceptor from "../Interceptors/ApiServiceInterceptor";
-import { StudyData,ModificationData } from "./StudiesType";
+import { ModificationData } from "./StudiesType";
 
 const axiosInstance=ApiServiceInterceptor.getInstance()
 
@@ -31,14 +31,14 @@ const studyService={
         return  axiosInstance.get(`/studies/${userId}`)
     },
     async updateStudyStatus(studyId:number,newStaus:any){
-        console.log("====>",newStaus,'the new Status');
+       
         
         return   axiosInstance.patch(`/studies/${studyId}/status`,{Status:newStaus})
     },
     async uploadSyntheseFile (studyId:number,file:Blob){
         const formData = new FormData();
         formData.append("pdfFile",file)
-        return axiosInstance.post(`/studies/${studyId}/uploadSyntheseFile`,formData,{
+        return axiosInstance.patch(`/studies/${studyId}`,formData,{
             headers:{
 
                 'Content-Type': undefined

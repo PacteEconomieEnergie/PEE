@@ -43,7 +43,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         .catch(console.error);
     }
   }, []);
-console.log(notifications,'the notifications');
+
 
   return (
     <NotificationContext.Provider value={{ notifications, setNotifications }}>

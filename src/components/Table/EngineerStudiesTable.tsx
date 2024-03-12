@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showSidePanel, closeSidePanel } from '../../store/sidebar/sidePanelSlice';
 import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
+// import enUs
 import StudySidePanel from '../Panel/StudyPanel';
 import { closeStudySidePanel,showStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
 const { Column } = Table;

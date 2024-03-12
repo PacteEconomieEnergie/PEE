@@ -1,12 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
 import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
+// import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
 import RcResizeObserver from 'rc-resize-observer';
-import { Table,Col,Avatar, Row,Tooltip, Tag } from 'antd';
+import { Table,Avatar,Tooltip } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import studyService from '../../../Services/Api/Studies/StudiesService';
 function OverviewAssistant() {
 
@@ -22,6 +22,7 @@ useEffect(() => {
     console.error("Error fetching engineers' studies:", error);
   });
 }, []);
+
 
 
 const determineEngineerStatus = (engineer:any) => {
@@ -73,30 +74,30 @@ const determineEngineerStatus = (engineer:any) => {
     );
   };
   
-  const isWithinTimeFrame = (date:any, timeFrame:any) => {
-    const now = new Date();
-    const targetDate = new Date(date);
+  // const isWithinTimeFrame = (date:any, timeFrame:any) => {
+  //   const now = new Date();
+  //   const targetDate = new Date(date);
   
-    switch (timeFrame) {
-      case 'day':
-        return targetDate.toDateString() === now.toDateString();
-      case 'week':
-        const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-        return targetDate > oneWeekAgo;
-      case 'month':
-        const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-        return targetDate > oneMonthAgo;
-      default:
-        return true;
-    }
-  };
+  //   switch (timeFrame) {
+  //     case 'day':
+  //       return targetDate.toDateString() === now.toDateString();
+  //     case 'week':
+  //       const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+  //       return targetDate > oneWeekAgo;
+  //     case 'month':
+  //       const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+  //       return targetDate > oneMonthAgo;
+  //     default:
+  //       return true;
+  //   }
+  // };
 
 
   const columns = [
     {
       title: 'User',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'Email',
+      key: 'Email',
       render: (text:any, record:any) => (
         
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -150,53 +151,18 @@ const determineEngineerStatus = (engineer:any) => {
         <div style={{ textAlign: 'center' }}>{studiesToDo}</div>
       ),
     },
-    // {
-    //   title: 'Studies',
-    //   key: 'studies',
-    //   render: (text:any, record:any) => (
-    //     <div>
-    //       {record.tasks.length > 0 ? record.tasks.map((task:any, index:any) => (
-    //         <div key={index} style={{ marginBottom: '10px' }}>
-    //           <p><strong>ID:</strong> {task.IdStudy}, <strong>Type:</strong> {task.type}, <strong>Status:</strong> <Tag color={getStudyStatusColor(task.Status)}>{task.Status}</Tag>, <strong>Client:</strong> {task.client.name}</p>
-    //         </div>
-    //       )) : <p>No studies assigned.</p>}
-    //     </div>
-    //   ),
-    // }
-    // {
-    //   title: 'Last Activity',
-    //   dataIndex: 'lastActivityDate',
-    //   render: (date:any) => date.toLocaleDateString(),
-    //   filters: [
-    //     { text: 'Day', value: 'day' },
-    //     { text: 'Week', value: 'week' },
-    //     { text: 'Month', value: 'month' }
-    //   ],
-    //   onFilter: (value:any, record:any) => isWithinTimeFrame(record.lastActivityDate, value),
-    // },
-    // {
-    //   title: 'Studies',
-    //   key: 'studies',
-    //   render: (_:any, record:any) => (
-    //     record.tasks.map((task:any, index:any) => (
-    //       <div key={index}>
-    //         <Tag color={getStudyStatusColor(task.Status)}>{task.title}: {task.Status}</Tag>
-    //         <p>Client: {task.client.name}</p>
-    //       </div>
-    //     ))
-    //   ),
-    // },
+
   ];
 
 
-  const getStudyStatusColor = (status:any) => {
-    switch (status) {
-      case 'Done': return 'green';
-      case 'inProgress': return 'orange';
-      case 'toDo': return 'red';
-      default: return 'default';
-    }
-  };
+  // const getStudyStatusColor = (status:any) => {
+  //   switch (status) {
+  //     case 'Done': return 'green';
+  //     case 'inProgress': return 'orange';
+  //     case 'toDo': return 'red';
+  //     default: return 'default';
+  //   }
+  // };
 
 
 

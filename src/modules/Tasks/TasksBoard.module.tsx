@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable,DropResult } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import { ColumnsState } from './TaskTypes';
 import { notification,Modal } from 'antd';
 import Column from './Column.module';
 import { useSelector,useDispatch } from 'react-redux';
 import StudySidePanel from '../../components/Panel/StudyPanel';
-import { closeStudySidePanel, showStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
+import { closeStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
 import studyService from '../../Services/Api/Studies/StudiesService';
 import UploadSyntheseModal from '../../components/modals/uploadSynthéseModal';
 import { ConfigProvider } from 'antd';
@@ -20,7 +20,7 @@ interface TasksBoardProps {
   const studySidePanelVisible = useSelector((state: any) => state.studySidePanel.visible);
   const studySidePanelData = useSelector((state: any) => state.studySidePanel.studyData);
   const dispatch = useDispatch();
-console.log(studySidePanelData);
+
 
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
 const [selectedStudyId, setSelectedStudyId] = useState<number | null>(null);

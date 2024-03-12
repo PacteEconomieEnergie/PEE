@@ -12,6 +12,11 @@ const ProtectedRoute = ({ children, allowedRoles }:any) => {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
+        const publicRoutes = ['/reset-password', '/login', '/signup'];
+        if (publicRoutes.includes(location.pathname)) {
+            setIsChecking(false); // Don't redirect, allow access
+            return;
+        }
         if (!isAuthenticated || (allowedRoles && !allowedRoles.includes(role))) {
             
             dispatch(logout());

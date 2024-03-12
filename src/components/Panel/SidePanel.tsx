@@ -25,7 +25,7 @@ console.log(data,'the sidepanel data');
   }, [data]);
 
   const renderDescriptionItem = (key: string, value: any) => {
-    console.log(key, value, 'the key and value');
+    
     
     if (Array.isArray(value)) {
       return value.map((item, index) => (

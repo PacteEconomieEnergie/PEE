@@ -24,7 +24,7 @@ const Column: React.FC<ColumnProps> = ({ column, loading }) => {
           style={{
             minHeight: '50px', // Ensure the droppable area has a minimum height
             backgroundColor: snapshot.isDraggingOver ? 'gray-400' : 'inherit',
-          }}
+          }}  
         >
           {loading ? (
               // Render Skeleton instead of actual tasks when loading

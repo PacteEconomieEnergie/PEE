@@ -9,6 +9,9 @@ import MessagePanel from '../../components/Panel/MessagePanel';
 import ProfileDropdown from '../../components/Dropdown/ProfileDropdown';
 import { logout } from '../../store/auth/authSlice'; // Update path as needed
 import { useNotifications } from '../../Contexts/NotificationContext';
+import { useAvatar } from '../../Contexts/AvatarProvider';
+import { a } from 'react-spring';
+
 interface HeaderContentProps {
   notifications: Array<{ id: string; message: string }>;
   messages: Array<{ id: string; message: string }>;
@@ -17,12 +20,15 @@ interface HeaderContentProps {
 }
 
 export const HeaderContent: React.FC = () => {
+  const {avatar}=useAvatar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { notifications } = useNotifications();
   const userLogged=useSelector((state:any)=>state.auth)
  
   
+
+
 
   const handleLogout = () => {
     dispatch(logout());

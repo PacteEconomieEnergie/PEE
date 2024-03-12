@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { EyeOutlined, EditOutlined, DeleteOutlined, CaretDownOutlined } from '@ant-design/icons'; // Import necessary icons
+// import { EyeOutlined, EditOutlined, DeleteOutlined, CaretDownOutlined } from '@ant-design/icons'; // Import necessary icons
 import { ProCard } from '@ant-design/pro-components';
-import { Card, Col, Row,List,Avatar ,Table} from 'antd';
-import { AnimatedCard } from "../../components/Cards/AnimatedCard";
+import {  Col, Row,Avatar ,Table} from 'antd';
+// import { AnimatedCard } from "../../components/Cards/AnimatedCard";
 import BulletChart from "../../components/Charts/BulletChart";
+import studyService from "../../Services/Api/Studies/StudiesService";
 export const Engineer:React.FC = () => {
-    const [dropdownItem, setDropdownItem] = useState<any>(null);
+    // const [dropdownItem, setDropdownItem] = useState<any>(null);
   // Sample data for demonstration (replace this with your actual data or fetch it)
-  const [engineers, setEngineers] = useState([
-    { id: 1, name: "Engineer A", studiesDone: 20, email: "a@example.com", photo: "/assets/icons/avatar1.svg" },
-    { id: 2, name: "Engineer B", studiesDone: 5, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
-    { id: 2, name: "Engineer C", studiesDone: 10, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
-    { id: 2, name: "Engineer D", studiesDone: 15, email: "b@example.com", photo: "/assets/icons/avatar2.svg" },
-    // ... more engineers
-  ]);
-
+  const [engineers, setEngineers] = useState<any>(null);
+  useEffect(() => {
+    studyService.getEngineersStudies().then((response:any) => {
+     
+      setEngineers(response);
+    }).catch((error) => {
+      console.error("Error fetching engineers' studies:", error);
+    });
+  }, []);
+  
   // Sort engineers by studies done to identify top performers
-  const sortedEngineers = engineers.sort((a, b) => b.studiesDone - a.studiesDone);
-  const topThreeEngineers = sortedEngineers.slice(0, 3);
+  // const sortedEngineers = engineers?.sort((a:any, b:any) => b.studiesCompleted- a.studiesCompleted);
+  // const topThreeEngineers = sortedEngineers.slice(0, 3);
 
  
   const columns = [
@@ -34,18 +37,18 @@ export const Engineer:React.FC = () => {
     },
     {
       title: 'Email',
-      dataIndex: 'email',
+      dataIndex: 'Email',
       key: 'email',
     },
     {
-      title: 'Studies Done',
-      dataIndex: 'studiesDone',
-      key: 'studiesDone',
+      title: 'studies Completed',
+      dataIndex: 'studiesCompleted',
+      key: 'studiesCompleted',
     },
   ];
   return (
    <>
-   <AnimatedCard/> 
+   {/* <AnimatedCard/>  */}
    <Row>
    <Col span={14}>
         {/* Content that will go on the left side of the line */}

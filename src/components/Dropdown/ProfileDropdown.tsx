@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Dropdown, Avatar } from 'antd';
 import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom'; // or useNavigate for react-router-dom v6
-
+import { useAvatar } from '../../Contexts/AvatarProvider';
 interface ProfileDropdownProps {
   userName: string;
   userEmail: string;
@@ -12,6 +12,8 @@ interface ProfileDropdownProps {
 const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ userName, userEmail, onLogout }) => {
   const navigate = useNavigate(); // or useNavigate for react-router-dom v6
   const userRole = localStorage.getItem('userRole');
+  const {avatar}=useAvatar();
+ 
   const handleMenuClick = (e: any) => {
     if (e.key === 'logout') {
       onLogout();
@@ -54,7 +56,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ userName, userEmail, 
   return (
     <Dropdown overlay={menu} trigger={['click']}>
       <span className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-        <Avatar size="large" icon={<UserOutlined />} />
+        <Avatar size="large" src={avatar} />
          {/* Additional span for the user's name if you want it outside the dropdown */}
       </span>
     </Dropdown>

@@ -15,11 +15,11 @@ const Studies: React.FC = () => {
   }, [dispatch]);
   const downloadFile = (file: string) => {
     // Logic to download the selected file (replace with your actual download logic)
-    console.log('Downloading file:', file);
+    
   };
   
   const handleActionClick = (action: string, record: any) => {
-    console.log(`${action} action on record:`, record);
+    
     // Add logic for each action here
   };
   if (isLoading) {

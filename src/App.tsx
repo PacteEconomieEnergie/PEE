@@ -7,7 +7,10 @@ import { AppDispatch } from "./store";
 import { AppLayout } from "./Layout/AppLayout";
 import ProtectedRoute from "./Router/ProtectedRoute";
 import { NotificationProvider } from "./Contexts/NotificationContext";
+import { ConfigProvider } from 'antd';
+import fr_FR from 'antd/lib/locale/fr_FR';
 import { UserSessionProvider } from "./modules/UserSessionProvider/UserSessionProvider.module";
+import { AvatarProvider } from "./Contexts/AvatarProvider";
 const App: React.FC = () => {
   const userId=useSelector((state:any)=>state?.auth?.id)
   const IdUser=localStorage.getItem('userId')
@@ -26,10 +29,12 @@ const App: React.FC = () => {
   <Router>
     <UserSessionProvider>
       <NotificationProvider>
+        <ConfigProvider locale={fr_FR}>
+        <AvatarProvider>
   <Routes>
     {routes?.map((route) => {
       const { path, element, children, allowedRoles } = route;
-      const Layout = route.layout || AppLayout;
+      const Layout = route.layout || React.Fragment;
       return (
         <Route
           key={path}
@@ -59,6 +64,8 @@ const App: React.FC = () => {
       );
     })}
   </Routes>
+  </AvatarProvider>
+  </ConfigProvider>
   </NotificationProvider>
   </UserSessionProvider>
 </Router>

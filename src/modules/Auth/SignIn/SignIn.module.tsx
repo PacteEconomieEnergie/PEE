@@ -64,6 +64,9 @@ export const SignIn:React.FC=()=>{
       const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
       };
+      const handleForgetPasswordClick = () => {
+        navigate("/reset-password"); // Navigate to the Reset Password page
+      };
     return(
         
         <div className="max-w-md w-full mx-4 p-6 bg-white shadow-md rounded-md">
@@ -100,15 +103,18 @@ export const SignIn:React.FC=()=>{
               placeholder="Enter your password"
               
             />
-            {/* <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="absolute inset-y-1 right-0 pr-3 flex items-center text-sm leading-5"
-          >
-            {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-          </button> */}
+          
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
+          <div className="mb-4">
+          <button
+            type="button"
+            onClick={handleForgetPasswordClick}
+            className="text-blue-500 hover:text-blue-600 text-sm float-right"
+          >
+            Forgot Password?
+          </button>
+        </div>
           <button
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:bg-blue-600"

@@ -5,6 +5,7 @@ export const ApiService = {
   fetchUserNotifications: async (userId:any) => {
     try {
       const response = await axiosInstance.get(`/notifications/${userId}`);
+     
       
       
       return response;

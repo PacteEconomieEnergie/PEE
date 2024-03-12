@@ -1,38 +1,47 @@
-import React, { useState,useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Upload, Avatar} from 'antd';
 import { UserOutlined, LockOutlined, UploadOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { FiPhone } from "react-icons/fi";
+import { useSelector } from 'react-redux';
+import ApiService from '../../../Services/Api/ApiService';
+import { useAvatar } from '../../../Contexts/AvatarProvider';
+
 // Additional imports if you're handling state with Redux
 
 const Settings: React.FC = () => {
   const [form] = Form.useForm();
-  const dispatch = useDispatch(); // if you're using Redux
-
-  const [avatar, setAvatar] = useState<string>(); // State to hold the avatar URL
-
+  // const dispatch = useDispatch(); // if you're using Redux
+  const {id}=useSelector((state:any)=>state.auth)
+  const { avatar, updateAvatar } = useAvatar();
 
   useEffect(() => {
-    // Clean up the object URL
-    return () => {
-      if (avatar) {
-        URL.revokeObjectURL(avatar);
-      }
-    };
-  }, [avatar]);
-  const handleAvatarChange = (info: any) => {
-    console.log(info.file.originFileObj);
     
-    // Since there's no backend upload, we're assuming the 'done' status is immediately available
-    // For real applications, you'd handle the server response here
-    if ( info.file && info.file.type.startsWith('image/')) {
-      // Create a URL for the uploaded file
-      console.log("loged");
-      
-      const imageUrl = URL.createObjectURL(info.file);
-      console.log('Image URL:', imageUrl);
-      setAvatar(imageUrl);
+  }, [avatar]);
+  const handleAvatarChange =async (info: any) => {
+
+    const userId = id;
+    if (info.file.status === 'uploading') {
+      console.log("Uploading...");
+      return;
+    }
+    if (info.file) {
+ 
+  
+      try {
+        // Directly use info.file as the file to upload.
+        const fileToUpload = info.file; // Assuming this is the correct file object.
+        
+        
+         await ApiService.uploadUserProfilePicture(userId, fileToUpload).then((response:any)=>updateAvatar(response.updatedUser.Avatar));
+       
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    } else {
+      console.error("Unexpected status or missing file object.");
     }
   }
+  
 
   const handleSubmit = (values: any) => {
     // Dispatch an action or call a function to save the updated  settings
@@ -54,7 +63,7 @@ const Settings: React.FC = () => {
               name="avatar"
               listType="picture"
               showUploadList={false}
-              beforeUpload={() => false} // Prevent automatic upload since you'll handle it manually
+               beforeUpload={() => false} // Prevent automatic upload since you'll handle it manually
               onChange={handleAvatarChange}
             >
               <Button icon={<UploadOutlined />}>Click to upload</Button>
@@ -63,6 +72,9 @@ const Settings: React.FC = () => {
         </Form.Item>
         <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
           <Input prefix={<UserOutlined />} />
+        </Form.Item>
+        <Form.Item label="Phone Number" name="Phone Number" rules={[{ required: true, message: 'Please input your Phone Number!' }]}>
+          <Input prefix={<FiPhone />} />
         </Form.Item>
         <Form.Item label="Old Password" name="oldPassword" rules={[{ required: true, message: 'Please input your old password!' }]}>
           <Input.Password prefix={<LockOutlined />} />
