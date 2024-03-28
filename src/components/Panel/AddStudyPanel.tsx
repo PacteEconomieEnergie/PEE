@@ -17,7 +17,7 @@ import { fetchClients } from '../../store/Clients/clientSlice'; // Import fetchC
 import { fetchEngineers } from '../../store/Engineers/engineersSlice'; // Import fetchEngineers action
 import { ConfigProvider } from 'antd';
 import { AppDispatch } from "../../store";
-// import studyService from "../../Services/Api/Studies/StudiesService";
+ import studyService from "../../Services/Api/Studies/StudiesService";
 import fr_FR from 'antd/lib/locale/fr_FR';
 
   const AddStudyPanel:React.FC=()=>{
@@ -25,7 +25,7 @@ import fr_FR from 'antd/lib/locale/fr_FR';
     const isVisible = useSelector((state:any) => state.sidePanel.isVisible);
     const clients = useSelector((state:any) => state.client.clients);
     const engineers = useSelector((state:any) => state.engineer.engineers);
-    // const createdById=useSelector((state:any)=>state.auth.id)
+     const createdById=useSelector((state:any)=>state.auth.id)
     const [factured,setFactured]=useState(false)
     const [typeEtude, setTypeEtude] = useState('');
     
@@ -99,14 +99,14 @@ import fr_FR from 'antd/lib/locale/fr_FR';
       }
       
         // Retrieve clientId and userId from form values or state/context if not part of the form
-        // const clientId = values.clientId;
-        // const userId = values.engineerId; // Assuming you're using engineerId as userId
+        const clientId = values.clientId;
+        const userId = values.engineerId; // Assuming you're using engineerId as userId
       
         try {
 
           
           // Call the studyService to submit the form data, including the file
-          // const response = await studyService.addStudy(formData, clientId, userId,createdById);
+            const response = await studyService.addStudy(formData, clientId, userId,createdById);
          
       
           // Handle success - e.g., showing a success message, closing the form

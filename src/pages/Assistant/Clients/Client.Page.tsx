@@ -57,7 +57,6 @@ const ClientPage: React.FC = () => {
     console.log('params', pagination, filters, sorter, extra);
   };
 
-  console.log("===> Clients Studies", clientsStudies);
 
   const paginationConfig = {
     defaultPageSize: 10,

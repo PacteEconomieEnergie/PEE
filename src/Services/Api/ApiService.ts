@@ -152,6 +152,16 @@ class ApiService {
             throw error;
         }
     }
+    public async updateUserSettings(userId: number, settingsData: { name?: string; phoneNumber?: string; oldPassword?: string; newPassword?: string }): Promise<any> {
+        try {
+            const response = await this.axiosInstance.patch(`/users/${userId}/settings`, settingsData);
+            
+            return response.data;
+        } catch (error) {
+            console.error('Error updating user settings:', error);
+            throw error;
+        }
+    }
     }
 
     // You can add more methods for other API requests as needed

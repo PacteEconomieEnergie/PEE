@@ -43,7 +43,7 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
       const items = [
         {
           key: 'dashboard',
-          icon: <DashboardOutlined className="h-8 w-8" />, // Tailwind classes for size
+          icon: <DashboardOutlined className="h-8 w-8 " />, // Tailwind classes for size
           label: 'Dashboard',
           link: '/admin/Dashboard',
         },

@@ -4,8 +4,10 @@ import { useSelector } from 'react-redux';
 
 function Project() {
   
-  const {userStudies}=useSelector((state:any)=>state.studies)
+  const {userStudies,loading}=useSelector((state:any)=>state.studies)
 
+
+  console.log(loading,'from the project page');
   
   return (
     <EngineerStudiesTable

@@ -18,6 +18,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     
     // const userToken = localStorage.getItem('authToken') || null;
     const socketRef = useRef<Socket | null>(null);
+    const apiUrl = process.env.REACT_APP_SERVER_URL;
     useEffect(() => {
         // Disconnect existing socket connection
         if (socketRef.current) {
@@ -25,7 +26,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
         // console.log("REACT_APP_SERVER_URL:", window.REACT_APP_SERVER_URL, "Final URL:", window.REACT_APP_SERVER_URL || 'http://localhost:3002');
         // Establish a new socket connection
-        socketRef.current = io('window.REACT_APP_SERVER_URL', {
+        socketRef.current = io('http://localhost:3002', {
             auth: { token: authToken },
         });
 

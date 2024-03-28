@@ -30,7 +30,7 @@ const RankingBarGraph = () => {
         fill: '#fff',
       },
     },
-    color: ['#2582a1', '#f88c24', '#c52125'],
+    // color: ['#2582a1', '#f88c24', '#c52125'],
     legend: {
       position: 'buttom',
     },

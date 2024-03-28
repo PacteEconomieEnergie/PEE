@@ -108,7 +108,7 @@ const [selectedStudyId, setSelectedStudyId] = useState<number | null>(null);
   return (
     <ConfigProvider locale={fr_FR}>
     <DragDropContext onDragEnd={handleDragAndDrop}>
-            <div className="flex flex-row overflow-x-auto py-2 gap-4">
+            <div className="flex flex-row overflow-x-auto py-2 gap-8">
   {Object.entries(columns).map(([columnId, column]) => (
     <Column key={columnId} column={column} loading={loading} />
   ))}

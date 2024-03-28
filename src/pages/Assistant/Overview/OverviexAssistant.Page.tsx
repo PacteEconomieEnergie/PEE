@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
-import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined,SettingOutlined,EditOutlined } from '@ant-design/icons';
 // import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
 import RcResizeObserver from 'rc-resize-observer';
 import { Table,Avatar,Tooltip } from 'antd';
@@ -22,6 +22,7 @@ useEffect(() => {
     console.error("Error fetching engineers' studies:", error);
   });
 }, []);
+
 
 
 
@@ -96,16 +97,18 @@ const determineEngineerStatus = (engineer:any) => {
   const columns = [
     {
       title: 'User',
-      dataIndex: 'Email',
-      key: 'Email',
-      render: (text:any, record:any) => (
-        
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          
-          <Avatar src={record.photo} />
-          <span style={{ marginLeft: 8 }}>{text}</span>
-        </div>
-      ),
+      dataIndex: 'name',
+      key: 'name',
+      render: (text: any, record: any) => {
+        // Determine the display text: if 'text' is not 'unnamed engineer', use 'text'; otherwise, use record.email
+        const displayText = text !== 'Unnamed Engineer' ? text : record.Email;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar src={record.photo} />
+            <span style={{ marginLeft: 8 }}>{displayText}</span>
+          </div>
+        );
+      },
       
     },
     {
@@ -196,7 +199,8 @@ const determineEngineerStatus = (engineer:any) => {
       direction="column"
       gutter={[1, responsive ? 24 : 16]}
       headerBordered
-      bordered>
+      bordered
+      className="shadow-xl rounded-lg">
          <ProCard
         direction={responsive ? "column" : "row"}
         gutter={16}
@@ -204,20 +208,21 @@ const determineEngineerStatus = (engineer:any) => {
       >
 
 <StatisticCard
-  className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-blue-500 to-blue-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
   title={<div className="flex-1 text-l">Total étude </div>}
   statistic={{
     value: studyStats.total,
     prefix: (
       <div className="absolute top-10 right-6  ">
-        <InfoCircleOutlined className="text-white text-2xl" />
+        <SettingOutlined className="text-white text-2xl" />
       </div>
     ),
   }}
 />
   
         <StatisticCard
-  className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-green-500 to-green-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
+ 
   title={<div className="flex-1 text-l">Total noveaux étude </div>}
   statistic={{
     value: studyStats.typeEtude.NouvelleEtude,
@@ -229,13 +234,13 @@ const determineEngineerStatus = (engineer:any) => {
   }}
 />
         <StatisticCard
-  className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
   title={<div className="flex-1 text-l">Total étude Modifier</div>}
   statistic={{
     value: studyStats.typeEtude.Retouche,
     prefix: (
       <div className="absolute top-10 right-6  ">
-        <InfoCircleOutlined className="text-white text-2xl" />
+        <EditOutlined className="text-white text-2xl" />
       </div>
     ),
   }}

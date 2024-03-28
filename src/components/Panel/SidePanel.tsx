@@ -18,26 +18,37 @@ const SidePanel: React.FC<SidePanelProps> = ({
   isEditing,
 }) => {
   const [editedData, setEditedData] = useState(data);
-console.log(data,'the sidepanel data');
+
 
   useEffect(() => {
     setEditedData(data);
   }, [data]);
 
+  const necessaryFields = [
+     "DateDeReception", "DateDeSoumission", "FullName", 
+    "TypeEtude", "NomberDeRetouche", "Status", "TypeDeRetouche", 
+    "Category", "Nature", "client"
+  ];
+
   const renderDescriptionItem = (key: string, value: any) => {
-    
-    
-    if (Array.isArray(value)) {
-      return value.map((item, index) => (
-        <Descriptions.Item label={`${key} ${index + 1}`} key={`${key}-${index}`}>
-          {typeof item === 'object' ? JSON.stringify(item, null, 2) : item.toString()}
-        </Descriptions.Item>
-      ));
-    } else if (typeof value === 'object') {
-      return <Descriptions.Item label={key}>{JSON.stringify(value, null, 2)}</Descriptions.Item>;
-    } else {
-      return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+    if (necessaryFields.includes(key)) {
+      if (key === 'client') { // Handle nested client object
+        return <Descriptions.Item label="ClientName">{value.ClientName}</Descriptions.Item>;
+      } else if (value !== null) { // Filter out null values
+        if (Array.isArray(value)) {
+          return value.map((item, index) => (
+            <Descriptions.Item label={`${key} ${index + 1}`} key={`${key}-${index}`}>
+              {typeof item === 'object' ? JSON.stringify(item, null, 2) : item.toString()}
+            </Descriptions.Item>
+          ));
+        } else if (typeof value === 'object') {
+          return <Descriptions.Item label={key}>{JSON.stringify(value, null, 2)}</Descriptions.Item>;
+        } else {
+          return <Descriptions.Item label={key}>{value}</Descriptions.Item>;
+        }
+      }
     }
+    return null; // Do not render unnecessary or null value fields
   };
 
   const handleSave = () => {
@@ -72,7 +83,7 @@ console.log(data,'the sidepanel data');
         </Form>
       ) : (
         <Descriptions column={1}>
-          {Object.entries(data).map(([key, value]) => renderDescriptionItem(key, value))}
+          {Object.entries(data).filter(([key]) => necessaryFields.includes(key)).map(([key, value]) => renderDescriptionItem(key, value))}
         </Descriptions>
       )}
       <Button onClick={onClose} style={{ marginTop: 16 }}>
