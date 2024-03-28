@@ -31,7 +31,7 @@ class ApiService {
                 Password: password,
                 Role: role,
             });
-            console.log(response,'from the api service');
+           
             
             return response;
         } catch (error) {
@@ -48,7 +48,7 @@ class ApiService {
                 Email: email,
                 Password: password,
             });
-            console.log("API response:", response);
+           
             return response;
         } catch (error) {
             console.error('API Error:', error);
@@ -73,8 +73,8 @@ class ApiService {
      */
     public async getUserById(id: number): Promise<any> {
         try {
-            const response = await this.axiosInstance.get(`"/users/${urlConfig.idUser}/${id}"`);
-            return response.data;
+            const response = await this.axiosInstance.get(`/users/id/${id}`);
+            return response;
         } catch (error) {
             throw error;
         }
@@ -107,6 +107,61 @@ class ApiService {
           throw error;
         }
       }
+      public async uploadUserProfilePicture(userId: string, file: File): Promise<any> {
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            const response = await this.axiosInstance.post(`/users/avatar/${userId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            
+            
+            return response;
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+            throw error;
+        }
+    }
+    public async requestPasswordReset(email: string): Promise<any> {
+        try {
+            const response = await this.axiosInstance.post('/users/resetPassword', { email });
+            return response.data;
+        } catch (error) {
+            console.error('Error requesting password reset:', error);
+            throw error;
+        }
+    }
+    public async verifyResetCode(email: string, resetCode: string): Promise<any> {
+        try {
+            const response = await this.axiosInstance.post('/users/verifyResetCode', { email, resetCode });
+            return response.data;
+        } catch (error) {
+            console.error('Error verifying reset code:', error);
+            throw error;
+        }
+    }
+    public async setNewPassword(email: string, newPassword: string): Promise<any> {
+        try {
+            const response = await this.axiosInstance.post('/users/setNewPassword', { email, newPassword });
+            return response.data;
+        } catch (error) {
+            console.error('Error setting new password:', error);
+            throw error;
+        }
+    }
+    public async updateUserSettings(userId: number, settingsData: { name?: string; phoneNumber?: string; oldPassword?: string; newPassword?: string }): Promise<any> {
+        try {
+            const response = await this.axiosInstance.patch(`/users/${userId}/settings`, settingsData);
+            
+            return response.data;
+        } catch (error) {
+            console.error('Error updating user settings:', error);
+            throw error;
+        }
+    }
     }
 
     // You can add more methods for other API requests as needed

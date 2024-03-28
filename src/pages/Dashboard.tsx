@@ -5,8 +5,8 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import ClientStudyChart from '../components/Charts/ChartLine';
 import LiquidChart from '../components/Charts/LiquidChart';
 import adminService from '../Services/Api/adminService';
-import { set } from 'date-fns';
-const { Statistic } = StatisticCard;
+
+// const { Statistic } = StatisticCard;
 export default () => {
   const [responsive, setResponsive] = useState(false);
   const [stats, setStats] = useState({
@@ -20,7 +20,7 @@ export default () => {
       setStats(response);
     });
   }, []);
-  console.log(stats, 'the stats');
+  
   
   return (
     <RcResizeObserver
@@ -44,7 +44,7 @@ export default () => {
       >
         
          <StatisticCard
-  className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="bg-yellow-400 text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total Ingénieur</div>}
   statistic={{
     value: stats.engineersCount,
@@ -56,7 +56,7 @@ export default () => {
   }}
 />
         <StatisticCard
-  className="bg-quadiare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="bg-cyan-400 text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total client</div>}
   statistic={{
     value: stats.clientsCount,
@@ -68,7 +68,7 @@ export default () => {
   }}
 />
         <StatisticCard
-  className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
+  className="bg-rose-500 text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total étude</div>}
   statistic={{
     value: stats.studiesCount,
@@ -80,7 +80,7 @@ export default () => {
   }}
 />
         <StatisticCard
-  className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="bg-lime-500/75 text-white rounded-lg flex mb-4 sm:mb-0"
   title={<div className="flex-1 text-l">Total assistant</div>}
   statistic={{
     value: stats.assistantsCount,

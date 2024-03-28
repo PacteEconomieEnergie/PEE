@@ -43,7 +43,7 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
       const items = [
         {
           key: 'dashboard',
-          icon: <DashboardOutlined className="h-8 w-8" />, // Tailwind classes for size
+          icon: <DashboardOutlined className="h-8 w-8 " />, // Tailwind classes for size
           label: 'Dashboard',
           link: '/admin/Dashboard',
         },
@@ -118,10 +118,10 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
     menuItemRender={(menuItemProps, defaultDom) => (
       <Link to={menuItemProps.path || '/'}>{defaultDom}</Link>
     )}
-    title="PEE"
+    title=""
     
     
-    logo={<img src="/images/logoPee.png" alt="Company Logo" />}
+    logo={<img src="/images/Picture1.png" alt="Company Logo" />}
     collapsed={collapsed}
       onCollapse={setCollapsed}
 

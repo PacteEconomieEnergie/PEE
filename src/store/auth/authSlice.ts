@@ -9,6 +9,7 @@ interface UserState {
   role: string | null;
   token: string | null;
   isAuthenticated: boolean;
+  avatar:string | null;
 }
 interface MyTokenPayload {
     userId: string;
@@ -24,6 +25,7 @@ const initialState: UserState = getAuthInfo().token
       role: null,  
       token: null,
       isAuthenticated: false,
+      avatar:null
     };
 
 const authSlice = createSlice({
@@ -42,6 +44,7 @@ const authSlice = createSlice({
       state.Email = Email;
       state.role = role;
       state.isAuthenticated = true;
+       
     },
     logout(state) {
       clearAuthInfo();

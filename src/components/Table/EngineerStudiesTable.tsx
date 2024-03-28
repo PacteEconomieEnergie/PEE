@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showSidePanel, closeSidePanel } from '../../store/sidebar/sidePanelSlice';
 import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
+// import enUs
 import StudySidePanel from '../Panel/StudyPanel';
 import { closeStudySidePanel,showStudySidePanel } from '../../store/sidebar/studySidePanelSlice';
 const { Column } = Table;
@@ -15,10 +16,9 @@ interface StudiesTableProps {
   }
 const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
   const dispatch = useDispatch();
-  // const apiUrl =  "http://localhost:3002";
-  const apiUrl =  window.REACT_APP_SERVER_URL;
+  const apiUrl = 'http://localhost:3002'
   const { visible, studyData } = useSelector((state:any) => state.studySidePanel);
-console.log("===> Studies",studies);
+
 
 
   const downloadFile = (fileId: any) => {
@@ -81,18 +81,35 @@ console.log("===> Studies",studies);
       }
     });
   };
+  const typeEtudeFilterOptions = studies ? Array.from(new Set(studies.map(study => study.TypeEtude))).map(typeEtude => ({
+    text: typeEtude,
+    value: typeEtude,
+  })) : [];
+  const clientFilterOptions = studies ? Array.from(new Set(studies.map(study => study.client.ClientName))).map(ClientName => ({
+    text: ClientName,
+    value: ClientName,
+  })) : [];
+  const statusFilterOptions = studies ? Array.from(new Set(studies.map(study => study.Status))).map(Status => ({
+    text: Status,
+    value: Status,
+  })) : [];
+  const natureFilterOptions = studies ? Array.from(new Set(studies.map(study => study.Nature))).map(Nature => ({
+    text: Nature,
+    value: Nature,
+  })) : [];
   return (
     <ConfigProvider locale={fr_FR}>
-      <div className="container mx-auto p-6 flex-1 overflow-y-auto">
+      <div className="container mx-auto p-6 flex-1 overflow-y-auto ">
         <div className="flex justify-center">
-          <div className="w-full">
-          <Table dataSource={studies} rowKey="Studies_IdStudies">
+          <div className="w-full shadow-lg">
+          <Table dataSource={studies} rowKey="Studies_IdStudies" rowClassName={(record) => record.Nature === "Prioritere" ? "bg-red-400" : ""}>
           <Column title="Created At" dataIndex={[ "createdAt"]} key="createdAt" render={(text) => new Date(text).toLocaleDateString()} />
           <Column title="Created By" dataIndex={[ "createdByUser","Email"]}  key="CreatedBy" render={text => text ? text : "N/A"} />
-          <Column title="Type d'Étude" dataIndex={[ "TypeEtude"]}  key="TypeEtude" />
-          <Column title="Nature" dataIndex={[ "Nature"]}  key="Nature" />
-          <Column title="Client" dataIndex={[ "client", "ClientName"]}  key="client.ClientName" />
-          <Column title="Status" dataIndex={[ "Status"]}  key="Status" />
+          <Column title="Type d'Étude" dataIndex={[ "TypeEtude"]}  key="TypeEtude"   filters={typeEtudeFilterOptions}
+  onFilter={(value, record:any) => record.TypeEtude === value}/>
+          <Column title="Nature" dataIndex={[ "Nature"]}  key="Nature" filters={natureFilterOptions} onFilter={(value, record:any) => record.Nature === value}/>
+          <Column title="Client" dataIndex={[ "client", "ClientName"]}  key="client.ClientName" filters={clientFilterOptions}  onFilter={(value, record:any) => record.client.ClientName === value}/>
+          <Column title="Status" dataIndex={[ "Status"]}  key="Status" filters={statusFilterOptions} onFilter={(value, record:any) => record.Status === value}/>
           <Column
             title="Files"
             key="files"

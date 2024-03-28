@@ -16,7 +16,7 @@
     "@types/jwt-decode": "^3.1.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/socket.io-client": "^3.0.0",
-    "antd": "^5.12.8",
+    "antd": "^5.15.0",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.7",
     "chart.js": "^4.4.1",

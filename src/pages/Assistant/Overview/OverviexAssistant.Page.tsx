@@ -1,12 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import { ProCard, StatisticCard } from '@ant-design/pro-components';
-import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
+import { InfoCircleOutlined,CheckCircleOutlined, SyncOutlined, ClockCircleOutlined,SettingOutlined,EditOutlined } from '@ant-design/icons';
+// import { AnimatedCard } from '../../../components/Cards/AnimatedCard';
 import RcResizeObserver from 'rc-resize-observer';
-import { Table,Col,Avatar, Row,Tooltip, Tag } from 'antd';
+import { Table,Avatar,Tooltip } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import studyService from '../../../Services/Api/Studies/StudiesService';
 function OverviewAssistant() {
 
@@ -22,6 +22,8 @@ useEffect(() => {
     console.error("Error fetching engineers' studies:", error);
   });
 }, []);
+
+
 
 
 const determineEngineerStatus = (engineer:any) => {
@@ -73,23 +75,23 @@ const determineEngineerStatus = (engineer:any) => {
     );
   };
   
-  const isWithinTimeFrame = (date:any, timeFrame:any) => {
-    const now = new Date();
-    const targetDate = new Date(date);
+  // const isWithinTimeFrame = (date:any, timeFrame:any) => {
+  //   const now = new Date();
+  //   const targetDate = new Date(date);
   
-    switch (timeFrame) {
-      case 'day':
-        return targetDate.toDateString() === now.toDateString();
-      case 'week':
-        const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-        return targetDate > oneWeekAgo;
-      case 'month':
-        const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-        return targetDate > oneMonthAgo;
-      default:
-        return true;
-    }
-  };
+  //   switch (timeFrame) {
+  //     case 'day':
+  //       return targetDate.toDateString() === now.toDateString();
+  //     case 'week':
+  //       const oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+  //       return targetDate > oneWeekAgo;
+  //     case 'month':
+  //       const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+  //       return targetDate > oneMonthAgo;
+  //     default:
+  //       return true;
+  //   }
+  // };
 
 
   const columns = [
@@ -97,14 +99,16 @@ const determineEngineerStatus = (engineer:any) => {
       title: 'User',
       dataIndex: 'name',
       key: 'name',
-      render: (text:any, record:any) => (
-        
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          
-          <Avatar src={record.photo} />
-          <span style={{ marginLeft: 8 }}>{text}</span>
-        </div>
-      ),
+      render: (text: any, record: any) => {
+        // Determine the display text: if 'text' is not 'unnamed engineer', use 'text'; otherwise, use record.email
+        const displayText = text !== 'Unnamed Engineer' ? text : record.Email;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar src={record.photo} />
+            <span style={{ marginLeft: 8 }}>{displayText}</span>
+          </div>
+        );
+      },
       
     },
     {
@@ -150,53 +154,18 @@ const determineEngineerStatus = (engineer:any) => {
         <div style={{ textAlign: 'center' }}>{studiesToDo}</div>
       ),
     },
-    // {
-    //   title: 'Studies',
-    //   key: 'studies',
-    //   render: (text:any, record:any) => (
-    //     <div>
-    //       {record.tasks.length > 0 ? record.tasks.map((task:any, index:any) => (
-    //         <div key={index} style={{ marginBottom: '10px' }}>
-    //           <p><strong>ID:</strong> {task.IdStudy}, <strong>Type:</strong> {task.type}, <strong>Status:</strong> <Tag color={getStudyStatusColor(task.Status)}>{task.Status}</Tag>, <strong>Client:</strong> {task.client.name}</p>
-    //         </div>
-    //       )) : <p>No studies assigned.</p>}
-    //     </div>
-    //   ),
-    // }
-    // {
-    //   title: 'Last Activity',
-    //   dataIndex: 'lastActivityDate',
-    //   render: (date:any) => date.toLocaleDateString(),
-    //   filters: [
-    //     { text: 'Day', value: 'day' },
-    //     { text: 'Week', value: 'week' },
-    //     { text: 'Month', value: 'month' }
-    //   ],
-    //   onFilter: (value:any, record:any) => isWithinTimeFrame(record.lastActivityDate, value),
-    // },
-    // {
-    //   title: 'Studies',
-    //   key: 'studies',
-    //   render: (_:any, record:any) => (
-    //     record.tasks.map((task:any, index:any) => (
-    //       <div key={index}>
-    //         <Tag color={getStudyStatusColor(task.Status)}>{task.title}: {task.Status}</Tag>
-    //         <p>Client: {task.client.name}</p>
-    //       </div>
-    //     ))
-    //   ),
-    // },
+
   ];
 
 
-  const getStudyStatusColor = (status:any) => {
-    switch (status) {
-      case 'Done': return 'green';
-      case 'inProgress': return 'orange';
-      case 'toDo': return 'red';
-      default: return 'default';
-    }
-  };
+  // const getStudyStatusColor = (status:any) => {
+  //   switch (status) {
+  //     case 'Done': return 'green';
+  //     case 'inProgress': return 'orange';
+  //     case 'toDo': return 'red';
+  //     default: return 'default';
+  //   }
+  // };
 
 
 
@@ -230,7 +199,8 @@ const determineEngineerStatus = (engineer:any) => {
       direction="column"
       gutter={[1, responsive ? 24 : 16]}
       headerBordered
-      bordered>
+      bordered
+      className="shadow-xl rounded-lg">
          <ProCard
         direction={responsive ? "column" : "row"}
         gutter={16}
@@ -238,20 +208,21 @@ const determineEngineerStatus = (engineer:any) => {
       >
 
 <StatisticCard
-  className="bg-tertiare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-blue-500 to-blue-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
   title={<div className="flex-1 text-l">Total étude </div>}
   statistic={{
     value: studyStats.total,
     prefix: (
       <div className="absolute top-10 right-6  ">
-        <InfoCircleOutlined className="text-white text-2xl" />
+        <SettingOutlined className="text-white text-2xl" />
       </div>
     ),
   }}
 />
   
         <StatisticCard
-  className="bg-secondaire text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-green-500 to-green-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
+ 
   title={<div className="flex-1 text-l">Total noveaux étude </div>}
   statistic={{
     value: studyStats.typeEtude.NouvelleEtude,
@@ -263,13 +234,13 @@ const determineEngineerStatus = (engineer:any) => {
   }}
 />
         <StatisticCard
-  className="bg-primare text-white rounded-lg flex mb-4 sm:mb-0"
+  className="shadow-lg rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-400 mb-4 sm:mb-0 text-white transform transition duration-500 hover:scale-105"
   title={<div className="flex-1 text-l">Total étude Modifier</div>}
   statistic={{
     value: studyStats.typeEtude.Retouche,
     prefix: (
       <div className="absolute top-10 right-6  ">
-        <InfoCircleOutlined className="text-white text-2xl" />
+        <EditOutlined className="text-white text-2xl" />
       </div>
     ),
   }}

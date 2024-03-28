@@ -93,9 +93,9 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
             )}
             collapsed={collapsed}
             onCollapse={setCollapsed}
-            title="PEE"
+            title=""
             
-            logo={<img src="/images/logoPee.png" alt="Company Logo" />} // Change to your assistant logo
+            logo={<img src="/images/Picture1.png" alt="Company Logo" />} // Change to your assistant logo
             headerContentRender={() => <HeaderContent  />}
         >
             <PageContainer>

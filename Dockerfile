@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 
 # Step 4: Install any needed packages
 # Using --production flag to skip installing devDependencies
-RUN npm ci 
+RUN npm ci --verbose
 
 # Step 5: Bundle app source
 COPY . .
@@ -25,13 +25,9 @@ RUN npm prune --production
 # serve is installed globally to make it available to run your built app
 RUN npm install -g serve
 
-# Copy the entrypoint script into the container and make it executable
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 # Step 8: The port your app will run on
 EXPOSE 3000
 
 # Step 9: Run serve when the container launches
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD sed -i "s|__REACT_APP_SERVER_URL__|${REACT_APP_SERVER_URL}|g" /usr/src/app/build/index.html && exec serve -s build -l 3000

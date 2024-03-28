@@ -1,42 +1,92 @@
-import React, { useState,useEffect } from 'react';
-import { Form, Input, Button, Upload, Avatar} from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Input, Button, Upload, Avatar,message} from 'antd';
 import { UserOutlined, LockOutlined, UploadOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { FiPhone } from "react-icons/fi";
+import { useSelector } from 'react-redux';
+import ApiService from '../../../Services/Api/ApiService';
+import { useAvatar } from '../../../Contexts/AvatarProvider';
+
 // Additional imports if you're handling state with Redux
 
 const Settings: React.FC = () => {
   const [form] = Form.useForm();
-  const dispatch = useDispatch(); // if you're using Redux
-
-  const [avatar, setAvatar] = useState<string>(); // State to hold the avatar URL
-
+  // const dispatch = useDispatch(); // if you're using Redux
+  const {id}=useSelector((state:any)=>state.auth)
+  const { avatar, updateAvatar } = useAvatar();
 
   useEffect(() => {
-    // Clean up the object URL
-    return () => {
-      if (avatar) {
-        URL.revokeObjectURL(avatar);
-      }
-    };
-  }, [avatar]);
-  const handleAvatarChange = (info: any) => {
-    console.log(info.file.originFileObj);
     
-    // Since there's no backend upload, we're assuming the 'done' status is immediately available
-    // For real applications, you'd handle the server response here
-    if ( info.file && info.file.type.startsWith('image/')) {
-      // Create a URL for the uploaded file
-      console.log("loged");
-      
-      const imageUrl = URL.createObjectURL(info.file);
-      console.log('Image URL:', imageUrl);
-      setAvatar(imageUrl);
+  }, [avatar]);
+  const handleAvatarChange =async (info: any) => {
+   
+    const userId = id;
+    if (info.file.status === 'uploading') {
+      console.log(info.file.status,"Uploading...");
+      return;
+    }
+    if (info.file) {
+ 
+  
+      try {
+        // Directly use info.file as the file to upload.
+        const fileToUpload = info.file; // Assuming this is the correct file object.
+        
+        
+         await ApiService.uploadUserProfilePicture(userId, fileToUpload).then((response:any)=>{
+          updateAvatar(response.updatedUser.Avatar);
+          message.destroy(); // Remove the loading message
+          message.success('Profile picture updated successfully.');
+        })
+       
+      } catch (error) {
+        message.error('Failed to upload picture. Please try again.');
+        console.error('Error uploading file:', error);
+      }
+    } else {
+      message.error('Upload failed. Please check your connection.');
+      console.error("Unexpected status or missing file object.");
     }
   }
+  
 
-  const handleSubmit = (values: any) => {
-    // Dispatch an action or call a function to save the updated  settings
-    console.log(values);
+  const handleSubmit = async (values: any) => {
+    const { name, phoneNumber, oldPassword, newPassword, confirmPassword } = values;
+  const userId=id;
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      message.error('New password and confirm password do not match.');
+      return; // Stop the form submission process
+    }
+  
+    try {
+      // Prepare the data object for updating user settings
+      const settingsData = {
+        name,
+        phoneNumber,
+        oldPassword,
+        newPassword,
+      };
+
+  
+      // Call the updateUserSettings method from ApiService
+      await ApiService.updateUserSettings(userId, settingsData);
+  
+      // Show a success message
+      message.success('Your settings have been updated successfully.');
+  
+      // Optionally, reset the form here using form.resetFields() if needed
+    } catch (error:any) {
+      if (error.response && error.response.status === 400) {
+        message.error('Invalid data. Please review your entries.');
+      } else if (error.response && error.response.status === 401) {
+        message.error('You are not authorized to perform this action. Please login again.');
+      } else {
+        message.error('An unexpected error occurred. Please try again later.');
+      }
+      // console.error('Error updating user settings:', error);
+      // // Show an error message
+      // message.error('Failed to update settings. Please try again.');
+    }
   };
 
   return (
@@ -54,7 +104,7 @@ const Settings: React.FC = () => {
               name="avatar"
               listType="picture"
               showUploadList={false}
-              beforeUpload={() => false} // Prevent automatic upload since you'll handle it manually
+               beforeUpload={() => false} // Prevent automatic upload since you'll handle it manually
               onChange={handleAvatarChange}
             >
               <Button icon={<UploadOutlined />}>Click to upload</Button>
@@ -64,6 +114,9 @@ const Settings: React.FC = () => {
         <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
           <Input prefix={<UserOutlined />} />
         </Form.Item>
+        <Form.Item label="Phone Number" name="phoneNumber" rules={[{ required: true, message: 'Please input your Phone Number!' }]}>
+          <Input prefix={<FiPhone />} />
+        </Form.Item>
         <Form.Item label="Old Password" name="oldPassword" rules={[{ required: true, message: 'Please input your old password!' }]}>
           <Input.Password prefix={<LockOutlined />} />
         </Form.Item>
@@ -72,11 +125,26 @@ const Settings: React.FC = () => {
           <Input.Password prefix={<LockOutlined />} />
         </Form.Item>
 
-        
+        <Form.Item
+  label="Confirm New Password"
+  name="confirmPassword"
+  rules={[
+    {
+      required: true,
+      message: 'Please confirm your new password!',
+    },
+    // Additional validation rules as needed
+  ]}
+>
+  <Input.Password prefix={<LockOutlined />} />
+</Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button  htmlType="button" className='bg-lime-500'>
             Save Changes
+          </Button>
+          <Button  htmlType="reset" className='bg-lime-500 m-4'>
+            Cancel
           </Button>
         </Form.Item>
       </Form>

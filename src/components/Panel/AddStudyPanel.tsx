@@ -17,7 +17,7 @@ import { fetchClients } from '../../store/Clients/clientSlice'; // Import fetchC
 import { fetchEngineers } from '../../store/Engineers/engineersSlice'; // Import fetchEngineers action
 import { ConfigProvider } from 'antd';
 import { AppDispatch } from "../../store";
-import studyService from "../../Services/Api/Studies/StudiesService";
+ import studyService from "../../Services/Api/Studies/StudiesService";
 import fr_FR from 'antd/lib/locale/fr_FR';
 
   const AddStudyPanel:React.FC=()=>{
@@ -25,7 +25,7 @@ import fr_FR from 'antd/lib/locale/fr_FR';
     const isVisible = useSelector((state:any) => state.sidePanel.isVisible);
     const clients = useSelector((state:any) => state.client.clients);
     const engineers = useSelector((state:any) => state.engineer.engineers);
-    const createdById=useSelector((state:any)=>state.auth.id)
+     const createdById=useSelector((state:any)=>state.auth.id)
     const [factured,setFactured]=useState(false)
     const [typeEtude, setTypeEtude] = useState('');
     
@@ -42,7 +42,7 @@ import fr_FR from 'antd/lib/locale/fr_FR';
 
 
       const handleFormSubmit = async (values: any) => {
-        console.log('Form Submitted:', values); // Debugging line to check form values
+      
       
         const formData = new FormData(); // Prepare a FormData object to hold form data
       
@@ -50,7 +50,7 @@ import fr_FR from 'antd/lib/locale/fr_FR';
         Object.keys(values).forEach(key => {
           let value = values[key];
           if (key === 'Factured') {
-            console.log("Before conversion:", key, value); // Debugging
+        
     
             // Assuming value could be "true"/"false" string or ["true", "0"]/["false", "0"] array
             if (typeof value === 'string') {
@@ -63,7 +63,7 @@ import fr_FR from 'antd/lib/locale/fr_FR';
                 value = value ? 1 : 0;
             }
     
-            console.log("After conversion:", key, "the type",typeof(value)); // Debugging
+           
             formData.append('Factured', value);
             return; // Skip further processing for this key
         }
@@ -103,11 +103,11 @@ import fr_FR from 'antd/lib/locale/fr_FR';
         const userId = values.engineerId; // Assuming you're using engineerId as userId
       
         try {
-          console.log(formData,'the data form ===<');
+
           
           // Call the studyService to submit the form data, including the file
-          const response = await studyService.addStudy(formData, clientId, userId,createdById);
-          console.log('Study added successfully:', response);
+            const response = await studyService.addStudy(formData, clientId, userId,createdById);
+         
       
           // Handle success - e.g., showing a success message, closing the form
           handleClose(); // Assuming handleClose() closes the form/modal

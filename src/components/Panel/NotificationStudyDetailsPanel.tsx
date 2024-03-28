@@ -16,7 +16,8 @@ const NotificationStudyDetailsPanel: React.FC<NotificationStudyDetailsProps> = (
     dispatch(closeNotificationStudyDetails());
   };
 
-  const apiUrl = window.REACT_APP_SERVER_URL;
+
+  const apiUrl ='http://localhost:3002'
   
   const downloadFile = (fileId: any, fileName: any) => {
     const downloadUrl = `${apiUrl}/api/download/${fileId}`;

@@ -4,6 +4,7 @@ import { LandingPage } from "../pages/Landing.Page";
 import { HomePage } from "../pages/Home.page";
 import StudiesPage from "../pages/studies/Studies.page";
 import Dashboard from "../pages/Dashboard";
+import ResetPassword from "../modules/Auth/ResetPassword";
 // import { Engineer } from "../modules/Engenieer/Engenieer.modules";
 import { EngenieerPage } from "../pages/Engenieer/Engenieer.page";
 import UserList from "../pages/Settings/UserList.page";
@@ -44,11 +45,16 @@ export const routes:RouteConfig[]=[
     path:"/",
     layout:AuthLayout
   },
+  // {
+  //   path: "/reset-password",
+  //   element: <ResetPassword />,
+  //   // layout: AuthLayout, // You can use AuthLayout or another layout if you want a specific layout for the reset password page
+  // },
     {
         path: "/admin/*",
         layout: AppLayout,
         allowedRoles: ['ADMIN'],
-        children: [
+        children: [  
           {
             path: "/home",
             element: <HomePage />

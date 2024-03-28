@@ -87,9 +87,9 @@ export const IngenieurLayout: React.FC<IngenieurLayoutProps> = ({ children }) =>
             )}
             collapsed={collapsed}
             onCollapse={setCollapsed}
-            title="Ingenieur Dashboard"
+            title=""
             fixedHeader={true}
-            logo={<img src="/images/logoPee.png" alt="Company Logo" />}
+            logo={<img src="/images/Picture1.png" alt="Company Logo" />}
             headerContentRender={() => <HeaderContent  />}
         >
             <PageContainer>

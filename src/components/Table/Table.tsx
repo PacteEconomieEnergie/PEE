@@ -8,8 +8,7 @@ import AddStudyPanel from '../Panel/AddStudyPanel';
 import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
 const { Column } = Table;
-const apiUrl =  "http://localhost:3002";
-// const apiUrl =  window.REACT_APP_SERVER_URL;
+const apiUrl = window.REACT_APP_SERVER_URL;
 interface StudiesTableProps {
   studies?: any[]; // Adjust the type according to your data structure
   onActionClick?: (action: string, record: any) => void;
@@ -22,7 +21,7 @@ const StudiesTable: React.FC<StudiesTableProps> = ({ studies, onActionClick, onF
   const selectedUser = useSelector((state:any) => state.sidePanel.data);
   const isEditing = useSelector((state:any) => state.sidePanel.isEditing);
   const userRole=useSelector((state:any)=>state.auth.role)
-console.log("===> studies tab",studies);
+
 
   
   const downloadFile = (fileId: any) => {
@@ -73,6 +72,8 @@ console.log("===> studies tab",studies);
         dispatch(closeSidePanel());
         dispatch(startEditing(false));
         dispatch(showSidePanel({ data: record, isEditing: false }));
+        console.log(record);
+        
         break;
 
       case 'Update':
@@ -98,9 +99,9 @@ console.log("===> studies tab",studies);
     </Menu>
   );
   const fileDownloadButton = (files: any) => {
-    console.log(files);
+ 
     const hasSynthese = files.some((file: any) => {
-      console.log(file.isSynthese);
+   
       
      return file.isSynthese});
     if (files.length === 1) {
@@ -108,7 +109,7 @@ console.log("===> studies tab",studies);
       return <Button onClick={() => downloadFile(files[0].idFiles)}><DownloadOutlined /> Download</Button>;
     }
      else {
-      console.log(files[1].idFiles);
+     
       
       // If there are multiple files, show a dropdown
       return (
@@ -120,7 +121,7 @@ console.log("===> studies tab",studies);
   }
 
   const renderClientName = (text:any, record:any) => {
-    console.log(record,'the client record ');
+    
     
     return record.client.ClientName; // Accessing nested client name
 };
@@ -144,11 +145,40 @@ const renderSyntheseDownloadButton = (files: any[]) => {
   // Return null or an empty fragment if there's no Synthèse file
   return null;
 };
+const clientNameFilterOptions = studies ? Array.from(new Set(studies.map(study => study.client.ClientName))).map(clientName => ({
+  text: clientName,
+  value: clientName,
+})) : [];
+const statusFilterOptions = studies ? Array.from(new Set(studies.map(study => study.Status))).map(status => ({
+  text: status,
+  value: status,
+})) : [];
+
+// Generate filter options for TypeEtude
+const typeEtudeFilterOptions = studies ? Array.from(new Set(studies.map(study => study.TypeEtude))).map(typeEtude => ({
+  text: typeEtude,
+  value: typeEtude,
+})) : [];
+
+// Generate filter options for Nature
+const natureFilterOptions = studies ? Array.from(new Set(studies.map(study => study.Nature))).map(nature => ({
+  text: nature,
+  value: nature,
+})) : [];
+const engineerFilterOptions = studies ? Array.from(new Set(studies.flatMap(study => 
+  study.users_has_studies.map((user_has_study:any) => user_has_study.users.Email)
+))).filter(email => email) // Remove undefined or null values
+.map(email => ({
+  text: email,
+  value: email,
+})) : [];
+console.log(studies);
+
   return (
     <ConfigProvider locale={fr_FR}>
     <div className="container mx-auto p-6  flex-1 overflow-y-auto">
     {canEdit && ( // Conditional rendering based on the user's role
-          <div className='flex justify-end'>
+          <div className='flex justify-end '>
             <Button className='flex m-4' onClick={() => dispatch(toggleSidePanel())}>
               <FileAddOutlined /> Add New Study
             </Button>
@@ -159,17 +189,26 @@ const renderSyntheseDownloadButton = (files: any[]) => {
 
 
     <div className="flex justify-center">
-      <div className="w-full">
-        <Table dataSource={studies}>
+      <div className="w-full ">
+        <Table dataSource={studies} rowKey="Studies_IdStudies" rowClassName={(record) => record.Nature === "Prioritere" ? "bg-red-400" : ""}>
         <Column title="Date de Réception" dataIndex="DateDeReception" key="DateDeReception" render={text => new Date(text).toLocaleDateString()} />
                             <Column title="Date de Soumission" dataIndex="DateDeSoumission" key="DateDeSoumission" render={text => new Date(text).toLocaleDateString()} />
-                            <Column title="Client" render={renderClientName} key="Client" />
+                            <Column title="Client" render={renderClientName} key="Client" filters={clientNameFilterOptions} onFilter={(value, record) => record.client.ClientName === value} />
                             <Column title="Nom et prénom de bénificier" dataIndex="FullName" key="FullName" />
                             <Column title="Facturé" dataIndex="Factured" key="Factured" render={text => text ? "Yes" : "No"} />
-                            <Column title="Type d'étude" dataIndex="TypeEtude" key="TypeEtude" />
+                            <Column title="Type d'étude" dataIndex="TypeEtude" key="TypeEtude" filters={typeEtudeFilterOptions}
+    onFilter={(value, record:any) => record.TypeEtude === value} />
                             <Column title="Catégorie" dataIndex="Category" key="Category" />
-                            <Column title="Nature" dataIndex="Nature" key="Nature" />
-                            <Column title="Ingénieur" render={renderEngineerEmail} key="Ingénieur" />
+                            <Column title="Nature" dataIndex="Nature" key="Nature" filters={natureFilterOptions}
+    onFilter={(value, record:any) => record.Nature === value} />
+                            <Column title="Status" dataIndex="Status" key="Status" filters={statusFilterOptions} onFilter={(value, record:any) => record.Status === value} />
+                            <Column
+  title="Engineer"
+  key="engineer"
+  filters={engineerFilterOptions}
+  onFilter={(value, record: any) => record.users_has_studies.some((user_has_study:any) => user_has_study.users.Email === value)}
+  render={(text, record: any) => renderEngineerEmail(text, record)}
+/>
                             <Column
     title="Synthèse"
     key="synthese"
@@ -208,7 +247,7 @@ const renderSyntheseDownloadButton = (files: any[]) => {
           onClose={() => dispatch(closeSidePanel())}
           onSave={(editedData) => {
             // Implement your update logic here
-            console.log('Saving user:', editedData);
+            
             // Call any necessary function to update the user data in your state or backend
 
             // Close the side panel after saving

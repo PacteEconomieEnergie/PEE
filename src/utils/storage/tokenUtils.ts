@@ -1,7 +1,12 @@
 export const setUserRole = (role:any) => {
     localStorage.setItem('role', role);
   }
-  
+export const setEmail = (Email:any) => {
+    localStorage.setItem('useremail', Email);
+  }  
+  export const getEmail = () => {
+    return localStorage.getItem('useremail');
+  }
   export const getUserRole = () => {
     return localStorage.getItem('role');
   }
@@ -10,13 +15,14 @@ export const setUserRole = (role:any) => {
     localStorage.removeItem('role');
   }
 
-  export const setAuthInfo = ({ token, userId, Email, role }:any) => {
+  export const setAuthInfo = ({ token, userId, Email, role,avatar }:any) => {
     
     
     localStorage.setItem('authToken', token);
     localStorage.setItem('userId', userId);
     localStorage.setItem('useremail', Email);
     localStorage.setItem('userRole', role);
+
   };
   
   export const clearAuthInfo = () => {
@@ -32,5 +38,6 @@ export const setUserRole = (role:any) => {
       id: localStorage.getItem('userId'),
       Email: localStorage.getItem('useremail'),
       role: localStorage.getItem('userRole'),
+      avatar:localStorage.getItem('avatar')
     };
   }

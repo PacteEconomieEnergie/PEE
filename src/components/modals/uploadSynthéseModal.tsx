@@ -22,6 +22,7 @@ const UploadSyntheseModal: React.FC<UploadSyntheseModalProps> = ({ visible, stud
     
     try {
       const response = await studyService.uploadSyntheseFile(studyId, fileList[0]);
+      console.log(response,"the res");
       message.success("File uploaded successfully");
       onClose(); // Close the modal and possibly refresh the list of studies or the status
     } catch (error) {
