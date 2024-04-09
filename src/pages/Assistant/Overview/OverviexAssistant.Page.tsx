@@ -8,20 +8,25 @@ import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
 import { useSelector } from 'react-redux';
 import studyService from '../../../Services/Api/Studies/StudiesService';
+import { Skeleton } from 'antd';
 function OverviewAssistant() {
 
   const {studyStats}=useSelector((state:any)=>state.studies)
   const [responsive, setResponsive] = useState(false);
   const [engineers, setEngineers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  studyService.getEngineersStudies().then((response:any) => {
-   
-    setEngineers(response);
-  }).catch((error) => {
-    console.error("Error fetching engineers' studies:", error);
-  });
-}, []);
+  useEffect(() => {
+    setLoading(true); // Start loading
+    studyService.getEngineersStudies().then((response:any) => {
+      setEngineers(response);
+      setLoading(false); // Stop loading once the data is fetched
+    }).catch((error) => {
+      console.error("Error fetching engineers' studies:", error);
+      setLoading(false); // Stop loading on error as well
+    });
+  }, []);
+  
 
 
 
@@ -254,11 +259,16 @@ const determineEngineerStatus = (engineer:any) => {
           headerBordered
           style={{ height: '100%', maxWidth: '96%',margin:10 }}
         >
-          <Table
-            columns={columns}
-            dataSource={engineers}
-            pagination={paginationConfig} 
-          />
+            {loading ? (
+    <Skeleton active paragraph={{ rows: 4 }} />
+  ) : (
+    <Table
+      columns={columns}
+      dataSource={engineers}
+      pagination={paginationConfig}
+    />
+  )}
+
         </ProCard>
      
 

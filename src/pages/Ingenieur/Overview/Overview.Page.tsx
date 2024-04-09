@@ -13,7 +13,6 @@ export default function Overview() {
 
   const [responsive, setResponsive] = useState(false);
 
-console.log(userStudyStats?.total,'the user study stats');
 
   const donePercentage = userStudyStats?.total > 0 ? (userStudyStats.status.Done / userStudyStats.total) * 100 : 0;
   const inProgressPercentage = userStudyStats.total > 0 ? (userStudyStats.status.inProgress / userStudyStats.total) * 100 : 0;

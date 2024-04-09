@@ -21,7 +21,6 @@ interface Notification {
 }
 
 const NotificationItem: React.FC<{ notification: Notification, onOpenStudyDetails: (studyData: any) => void }> = ({ notification, onOpenStudyDetails }) => {
-  console.log(localStorage.getItem('userId'))
   const handleClick = () => {
     onOpenStudyDetails(notification.study);
   };

@@ -7,9 +7,8 @@ import {  DashboardOutlined,
 import { AiOutlineUser } from 'react-icons/ai';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Link } from 'react-router-dom';
-// import {Dropdown, Menu, Space, Badge,Popover,List, Avatar, Button} from 'antd'
 import { useDispatch } from 'react-redux';
-import { logout } from '../store/auth/authSlice';
+
 
 import { HeaderContent } from '../modules/Header/Header.module';
 import type { ProSettings } from '@ant-design/pro-components';
@@ -20,7 +19,7 @@ interface AppLayoutProps{
 }
 
 export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
-  const dispatch = useDispatch();
+
     let location = useLocation();
     const [collapsed, setCollapsed] = useState(false);
   
@@ -86,16 +85,7 @@ export const AppLayout:React.FC<AppLayoutProps>=({ children})=>{
         },
       ];
       
-;const headerContentProps = {
-  notifications: [{ id: '1', message: 'Notification 1' },{ id: '2', message: 'Notification 2' }], // Your notifications data specific to Ingenieur layout
-  messages: [
-    { id: '1', message: 'New message from John' },
-    { id: '2', message: 'Reminder for tomorrow\'s meeting' },
-    // ... more messages
-  ],      // Your messages data specific to Ingenieur layout
-  userName: "Ingenieur Name",
-  userEmail: "ingenieur@email.com",
-};
+
 
       const menuData = transformItemsToMenuData(items)
     

@@ -3,7 +3,6 @@ import React,{useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Checkbox,message } from 'antd';
 import { AiOutlineGlobal } from "react-icons/ai";
-import { IoIosMail } from "react-icons/io";
 import { FiMail } from "react-icons/fi";
 import { useDispatch } from 'react-redux';
 import ApiService from '../Services/Api/ApiService';
@@ -41,13 +40,7 @@ const LoginPage: React.FC = () => {
           message.error(errorMessage);
         }
       }
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+  
   const showResetPasswordModal = () => {
     setIsModalVisible(true);
   };
@@ -55,9 +48,7 @@ const LoginPage: React.FC = () => {
   const closeResetPasswordModal = () => {
     setIsModalVisible(false);
   };
-  const handleForgotPasswordClick = () => {
-    navigate("/reset-password"); // Navigate to the Reset Password page
-  };
+  
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-300">
       <div className="w-full max-w-md p-8 space-y-3 rounded-xl bg-white shadow-2xl">

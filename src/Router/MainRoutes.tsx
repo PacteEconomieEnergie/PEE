@@ -1,14 +1,10 @@
 import React,{ReactNode} from "react";
 import { AppLayout } from "../Layout/AppLayout";
-import { LandingPage } from "../pages/Landing.Page";
 import { HomePage } from "../pages/Home.page";
 import StudiesPage from "../pages/studies/Studies.page";
 import Dashboard from "../pages/Dashboard";
-import ResetPassword from "../modules/Auth/ResetPassword";
-// import { Engineer } from "../modules/Engenieer/Engenieer.modules";
 import { EngenieerPage } from "../pages/Engenieer/Engenieer.page";
 import UserList from "../pages/Settings/UserList.page";
-import { UserDetails } from "../pages/Settings/UserDetails.page";
 import TasksPage from "../pages/Ingenieur/Tasks/Tasks.page";
 import { IngenieurLayout } from "../Layout/IngenieurLayout";
 import AuthLayout from "../Layout/AuthLayout";
@@ -18,11 +14,7 @@ import Overview from "../pages/Ingenieur/Overview/Overview.Page";
 import Project from "../pages/Ingenieur/Projects/Project.Page";
 import ClientPage from "../pages/Assistant/Clients/Client.Page";
 import OverviewAssistant from "../pages/Assistant/Overview/OverviexAssistant.Page";
-interface Route{
-    path:string;
-    element?:ReactNode;
-    children?:NestedRoute[]
-}
+
 
 interface NestedRoute{
     path:string;
@@ -37,9 +29,7 @@ interface RouteConfig{
     children?:NestedRoute[],
     allowedRoles?: string[]
 } 
-interface MainLayout{
-    children?:React.ReactNode
-}
+
 export const routes:RouteConfig[]=[
   {
     path:"/",

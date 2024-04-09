@@ -3,6 +3,8 @@ import { Table,Tooltip } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import enUS from 'antd/lib/locale/en_US';
+import { Skeleton } from 'antd';
+
 import { ConfigProvider } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../store';
@@ -28,10 +30,20 @@ interface StudySummaryType {
 const ClientPage: React.FC = () => {
   const { clientsStudies } = useSelector((state: any) => state.client);
   const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchClientsStudies());
+    setLoading(true); // Start loading
+    dispatch(fetchClientsStudies())
+      .unwrap() // Use unwrap to handle the promise returned by the async thunk
+      .then(() => {
+        setLoading(false); // Set loading to false once data is fetched
+      })
+      .catch(() => {
+        setLoading(false); // Also set loading to false on error
+      });
   }, [dispatch]);
+  
 
   // Convert the fetched data to the format expected by the table
   useEffect(() => {
@@ -122,12 +134,16 @@ const ClientPage: React.FC = () => {
   return (
     <ConfigProvider locale={enUS}>
       <div className="client-page-container">
+      {loading ? (
+        <Skeleton active paragraph={{ rows: 6 }} />
+      ) : (
         <Table 
           columns={columns} 
           dataSource={data} 
           onChange={onChange}
           pagination={paginationConfig} 
         />
+      )}
       </div>
     </ConfigProvider>
   );

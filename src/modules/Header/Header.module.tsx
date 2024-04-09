@@ -34,7 +34,7 @@ export const HeaderContent: React.FC = () => {
     dispatch(logout());
     navigate('/'); // Redirect to login or home page as needed
   };
-console.log(userLogged);
+
 
   return (
     <div className="flex justify-end items-center space-x-4 ">

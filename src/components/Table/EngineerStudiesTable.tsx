@@ -1,8 +1,8 @@
 import React from 'react';
-import { Table, Button, Dropdown, Menu, Tooltip  } from 'antd';
+import { Table, Button,  Menu, Tooltip  } from 'antd';
 import { FileOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { showSidePanel, closeSidePanel } from '../../store/sidebar/sidePanelSlice';
+
 import { ConfigProvider } from 'antd';
 import fr_FR from 'antd/lib/locale/fr_FR';
 // import enUs
@@ -96,7 +96,7 @@ const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
   const natureFilterOptions = studies ? Array.from(new Set(studies.map(study => study.Nature))).map(Nature => ({
     text: Nature,
     value: Nature,
-  })) : [];
+  })) : [];  
   return (
     <ConfigProvider locale={fr_FR}>
       <div className="container mx-auto p-6 flex-1 overflow-y-auto ">
@@ -126,7 +126,7 @@ const EngineerStudiesTable: React.FC<StudiesTableProps> = ({ studies }) => {
             dataIndex={[ "NomberDeRetouche"]}
             key="NomberDeRetouche"
             render={(text, record:any) => {
-              console.log(record, "record");
+              
               
                 // Check if the TypeEtude is "Retouche"
                 const isRetouche = record?.TypeEtude === "Retouche";

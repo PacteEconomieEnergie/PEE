@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useLocation,useNavigate } from 'react-router-dom';
 import { DashboardOutlined, 
-BookOutlined, SettingOutlined, LogoutOutlined,
-ToolOutlined,BellOutlined,MailOutlined,UserOutlined } from '@ant-design/icons';
-import { AiOutlineUser } from 'react-icons/ai';
+BookOutlined,ToolOutlined } from '@ant-design/icons';
+
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Link } from 'react-router-dom';
 import type { ProSettings } from '@ant-design/pro-components';
-import { useDispatch } from 'react-redux';
+
 
 
 import { HeaderContent } from '../modules/Header/Header.module';
@@ -18,9 +16,7 @@ interface IngenieurLayoutProps {
 }
 
 export const IngenieurLayout: React.FC<IngenieurLayoutProps> = ({ children }) => {
-    const dispatch = useDispatch();
-    let location = useLocation();
-    const navigate=useNavigate()
+    
     const [collapsed, setCollapsed] = useState(false);
 
     const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
@@ -30,16 +26,7 @@ export const IngenieurLayout: React.FC<IngenieurLayoutProps> = ({ children }) =>
       });
 
       
-      const headerContentProps = {
-        notifications: [{ id: '1', message: 'Notification 1' },{ id: '2', message: 'Notification 2' }], // Your notifications data specific to Ingenieur layout
-        messages: [
-          { id: '1', message: 'New message from John' },
-          { id: '2', message: 'Reminder for tomorrow\'s meeting' },
-          // ... more messages
-        ],      // Your messages data specific to Ingenieur layout
-        userName: "",
-        
-      };
+    
 
     const transformItemsToMenuData = (items: any) => {
         return items.map((item: any) => ({

@@ -15,7 +15,7 @@ interface AssistantLayoutProps {
 
 export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) => {
     let location = useLocation();
-    const dispatch = useDispatch();
+
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -33,16 +33,7 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
             children: item.children ? transformItemsToMenuData(item.children) : undefined,
         }));
     };
-    const headerContentProps = {
-      notifications: [{ id: '2', message: 'Notification 2' }], // Your notifications data specific to Ingenieur layout
-      messages: [
-        { id: '1', message: 'New message from John' },
-        { id: '2', message: 'Reminder for tomorrow\'s meeting' },
-        // ... more messages
-      ],      // Your messages data specific to Ingenieur layout
-      userName: "",
-      userEmail: "ingenieur@email.com",
-    };
+   
     
       
     const items = [
