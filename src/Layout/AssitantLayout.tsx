@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DashboardOutlined,SettingOutlined, UserOutlined,BookOutlined} from '@ant-design/icons';
+import { DashboardOutlined,SettingOutlined, UserOutlined,BookOutlined,CalendarOutlined} from '@ant-design/icons';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Link } from 'react-router-dom';
 
@@ -49,12 +49,12 @@ export const AssistantLayout: React.FC<AssistantLayoutProps> = ({ children }) =>
           label: 'Studies',
             link: '/assistant/Studies',
         },
-        // {
-        //     key: 'appointments',
-        //     icon: <CalendarOutlined className="h-8 w-8" />,
-        //     label: 'Appointments',
-        //     link: '/assistant/appointments',
-        // },
+        {
+            key: 'appointments',
+            icon: <CalendarOutlined className="h-8 w-8" />,
+            label: 'Appointments',
+            link: '/assistant/appointments',
+        },
         {
             key: 'clients',
             icon: <UserOutlined className="h-8 w-8" />,

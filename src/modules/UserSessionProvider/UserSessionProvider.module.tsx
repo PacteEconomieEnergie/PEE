@@ -39,6 +39,9 @@ export const UserSessionProvider: React.FC<UserSessionProviderProps> = ({ childr
           case "ASSISTANT":
             navigate('/assistant/Studies');
             break;
+          case "CLIENT":
+            navigate('/client/PlannedVisits');
+            break;
           default:
             navigate('/');
         }

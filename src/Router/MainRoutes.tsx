@@ -14,8 +14,8 @@ import Overview from "../pages/Ingenieur/Overview/Overview.Page";
 import Project from "../pages/Ingenieur/Projects/Project.Page";
 import ClientPage from "../pages/Assistant/Clients/Client.Page";
 import OverviewAssistant from "../pages/Assistant/Overview/OverviexAssistant.Page";
-
-
+import TechnicalVisit from "../pages/Client/TechnicalVisit";
+import PlannedVisits from "../pages/Client/PlannedVisits";
 interface NestedRoute{
     path:string;
     element?:ReactNode;
@@ -43,7 +43,7 @@ export const routes:RouteConfig[]=[
     {
         path: "/admin/*",
         layout: AppLayout,
-        allowedRoles: ['ADMIN'],
+        allowedRoles: ['ADMIN',"CLIENT"],
         children: [  
           {
             path: "/home",
@@ -124,6 +124,19 @@ export const routes:RouteConfig[]=[
         },
       ]
 
+  },
+  {path:"/client/*",
+    layout:AppLayout,
+    allowedRoles:['CLIENT'],
+    children:[
+      {path:'/home'},
+      {path:"/TechnicalVisit",
+        element:<TechnicalVisit/>
+      },
+      {path:"/PlannedVisits",
+        element:<PlannedVisits/>
+      }
+    ]
   }
 
     // {
