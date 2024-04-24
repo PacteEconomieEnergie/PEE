@@ -18,7 +18,7 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
       dispatch(closeStudySidePanel());
     };
  
-    const apiUrl = 'http://localhost:3002'
+    const apiUrl = 'http://163.172.194.175:3003'
     const downloadFile = (fileId:any, fileName:any) => {
       // Implement the download logic here
       const downloadUrl = `${apiUrl}/api/download/${fileId}`;
@@ -80,7 +80,7 @@ const StudySidePanel: React.FC<StudySidePanelProps> = ({ visible, studyData, onC
           Close
         </Button>
       </Drawer>
-    );
+    );  
   }
 
 export default StudySidePanel;

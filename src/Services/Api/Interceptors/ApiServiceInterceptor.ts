@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { log } from 'console';
 
-const apiUrl = 'http://localhost:3002'
+const apiUrl = 'http://163.172.194.175:3003'
 console.log("API URL:", apiUrl);
 
 class Interceptor {

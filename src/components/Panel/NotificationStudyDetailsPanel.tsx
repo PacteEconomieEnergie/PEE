@@ -17,7 +17,7 @@ const NotificationStudyDetailsPanel: React.FC<NotificationStudyDetailsProps> = (
   };
 
 
-  const apiUrl ='http://localhost:3002'
+  const apiUrl ='http://163.172.194.175:3003'
   
   const downloadFile = (fileId: any, fileName: any) => {
     const downloadUrl = `${apiUrl}/api/download/${fileId}`;

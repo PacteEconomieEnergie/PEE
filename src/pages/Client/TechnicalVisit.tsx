@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Upload, Row, Col, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import leadService from '../../Services/Api/leadService';
+import { useNavigate } from "react-router-dom";
 // import 'antd/dist/antd.css'; 
 
 interface ClientDetails {
@@ -20,7 +22,7 @@ const { Title } = Typography;
 const { TextArea } = Input;
 const TechnicalVisit: React.FC = () => {
   const [fileList, setFileList] = useState([]);
-
+  const navigate = useNavigate();
   const handleChange = ({ fileList }: any) => setFileList(fileList);
 
   const handleUpload = () => {
@@ -41,8 +43,32 @@ const TechnicalVisit: React.FC = () => {
         message.error('upload failed.');
       });
   };
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
+    const formData = new FormData();
+    fileList.forEach((file: any) => {
+        formData.append('pdfFile', file.originFileObj); // appending files to FormData
+    });
+
+    // Add non-file form data
+    Object.keys(values).forEach(key => {
+        formData.append(key, values[key]);
+    });
+
+    // Determining the type of the file or upload, you can customize this logic
+     // Assume you have a function that sets this
+    formData.append('type', "PieceJointe"); // Append the type which is not visible to the user
+
+    try {
+        const response = await leadService.createLead(formData);
+        console.log(response);
+        
+        message.success('Lead created successfully!');
+        console.log('Server response:', response);
+        navigate('/client/PlannedVisits')
+    } catch (error) {
+        message.error('Failed to create lead.');
+        console.error('Error:', error);
+    }
   };
 
   // Form fail handler
